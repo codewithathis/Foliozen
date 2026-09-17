@@ -63,6 +63,12 @@ For Vercel, import the repository using the Next.js preset. `vercel.json` suppli
 
 On Vercel, the canonical URL and Open Graph metadata use the production domain automatically. For another host, set `NEXT_PUBLIC_SITE_URL` to the public site URL during the build. Set `repo` in `src/lib/site.ts` to show the source link in the footer and FAQ.
 
+### Search
+
+The build writes `sitemap.xml`, `robots.txt`, `manifest.webmanifest` and a share image (`og-image.png`). Page titles and descriptions live in each `page.tsx` through `pageMetadata()` in `src/lib/seo.tsx`; the home page title and description are in `src/lib/site.ts`. When adding an indexable page, add it to `ROUTES` so it lands in the sitemap.
+
+To verify ownership in Google Search Console, set `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION` to the token from the HTML tag method during the build, then submit `<site url>/sitemap.xml`. Crawlers only read `robots.txt` at the root of a domain, so on a GitHub project page (`user.github.io/repo/`) the sitemap has to be submitted in Search Console. A custom domain avoids that.
+
 ## The ATS-safe ruleset
 
 Compiled from 2025–26 guidance on Workday, Taleo, iCIMS, Greenhouse and Lever. Greenhouse and Lever are lenient; Workday, Taleo and iCIMS are not, so the exports satisfy the strictest.

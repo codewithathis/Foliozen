@@ -124,3 +124,17 @@ test("the editor finishes hydration when browser storage access throws", () => {
   `], { encoding: "utf8", timeout: 10000 });
   assert.equal(result.status, 0, result.stderr || result.stdout);
 });
+
+test("scores an uploaded file by what a parser reads, not by the draft layout", async () => {
+  const { checkUpload } = await import("../src/lib/ats/upload");
+  const { DESIGNER_TEXT, RESUME_TEXT } = await import("./resume-fixtures");
+  const designer = checkUpload(DESIGNER_TEXT);
+  const ids = designer.issues.map((issue) => issue.id);
+  for (const id of ["C2", "U2", "U3", "U4"]) assert.ok(ids.includes(id), id);
+  assert.ok(!designer.passes.some((pass) => pass.id === "A1"));
+  assert.ok(!ids.includes("U5"));
+  const clean = checkUpload(RESUME_TEXT);
+  assert.ok(clean.score > designer.score);
+  assert.ok(!clean.issues.some((issue) => issue.id.startsWith("U")), JSON.stringify(clean.issues));
+  assert.equal(checkUpload("Just a paragraph of text with nothing else in it.").issues.find((issue) => issue.id === "U1")?.severity, "fail");
+});

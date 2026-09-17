@@ -7,6 +7,10 @@ const publicPath = (process.env.NEXT_PUBLIC_BASE_PATH || parsedUrl.pathname).rep
 export const SITE = {
   name: "ResumeFold",
   tagline: "Free, open-source resume builder. Gets past applicant tracking systems and still sounds like you.",
+  /** Home page title in search results; keep it under about 60 characters. */
+  title: "Free ATS-Friendly Resume Builder, No Sign-Up · ResumeFold",
+  /** Search-result description for the home page; keep it under about 155 characters. */
+  description: "Free ATS-friendly resume builder with no sign-up or watermark. Pick a template, check your ATS score and download your resume as PDF, DOCX or LaTeX.",
   /** Public URL of the deployed site (no trailing slash). Used for canonical / Open Graph. */
   url: parsedUrl.origin + publicPath,
   /** Source repository. Shown in the footer and FAQ; leave empty to hide. */

@@ -3,6 +3,27 @@
 import { useEffect, useState } from "react";
 import type { NavItem } from "./NavPill";
 
+/** Solves a CSS cubic-bezier for progress `t`, so scrolling can use the same curves as the UI. */
+function bezier(x1: number, y1: number, x2: number, y2: number) {
+  const curve = (a: number, b: number, s: number) => 3 * a * s * (1 - s) ** 2 + 3 * b * s * s * (1 - s) + s ** 3;
+  const slope = (a: number, b: number, s: number) => 3 * a * (1 - s) ** 2 + 6 * (b - a) * s * (1 - s) + 3 * (1 - b) * s * s;
+  return (t: number) => {
+    if (t <= 0 || t >= 1) return Math.min(1, Math.max(0, t));
+    let s = t;
+    for (let i = 0; i < 6; i++) {
+      const d = slope(x1, x2, s);
+      if (Math.abs(d) < 1e-6) break;
+      s = Math.min(1, Math.max(0, s - (curve(x1, x2, s) - t) / d));
+    }
+    return curve(y1, y2, s);
+  };
+}
+
+/** Eases in gently, then settles slowly, which reads as smooth on long jumps. */
+const fromRest = bezier(0.37, 0, 0.2, 1);
+/** Starts at speed, for a second click while the page is still moving. */
+const inMotion = bezier(0.2, 0.35, 0.25, 1);
+
 export function useSectionNavigation(items: NavItem[]) {
   const [activeHref, setActiveHref] = useState<string | null>(null);
   const sectionKey = JSON.stringify(items.filter((item) => item.href.startsWith("#")).map((item) => item.href));
@@ -17,6 +38,7 @@ export function useSectionNavigation(items: NavItem[]) {
     let pending: string | null = null;
     let frame = 0;
     let animation = 0;
+    let stoppedAt = -Infinity;
     let needsMeasure = true;
     let activationTop = 112;
     let maxScroll = 0;
@@ -61,6 +83,7 @@ export function useSectionNavigation(items: NavItem[]) {
       if (!frame) frame = requestAnimationFrame(updateActive);
     };
     const cancelMotion = () => {
+      if (animation) stoppedAt = performance.now();
       cancelAnimationFrame(animation);
       animation = 0;
       pending = null;
@@ -81,6 +104,8 @@ export function useSectionNavigation(items: NavItem[]) {
 
       event.preventDefault();
       cancelMotion();
+      // The pointerdown for this click may already have stopped a running scroll.
+      const moving = performance.now() - stoppedAt < 250;
       measure();
       pending = href;
       setActiveHref(href);
@@ -92,7 +117,8 @@ export function useSectionNavigation(items: NavItem[]) {
         return Math.max(0, Math.min(maxScroll, position.top - position.margin));
       };
       const target = destination();
-      const duration = Math.min(1200, 350 + Math.sqrt(Math.abs(target - start)) * 14);
+      const duration = Math.min(1300, 480 + Math.sqrt(Math.abs(target - start)) * 11);
+      const ease = moving ? inMotion : fromRest;
       const finish = () => {
         animation = 0;
         cancelAnimationFrame(frame);
@@ -117,7 +143,7 @@ export function useSectionNavigation(items: NavItem[]) {
       const started = performance.now();
       const tick = (now: number) => {
         const progress = Math.min(1, (now - started) / duration);
-        const eased = progress * progress * (3 - 2 * progress);
+        const eased = ease(progress);
         window.scrollTo({ top: start + (destination() - start) * eased, behavior: "instant" });
         if (progress < 1) animation = requestAnimationFrame(tick);
         else finish();

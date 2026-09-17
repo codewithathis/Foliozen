@@ -3,12 +3,13 @@ import Link from "next/link";
 import { FloatingNav } from "@/components/ui/FloatingNav";
 import { CHANGELOG } from "@/lib/changelog";
 import { SITE } from "@/lib/site";
+import { JsonLd, ROUTES, breadcrumb, pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Changelog",
-  description: "Updates to ResumeFold, organised by month and release number.",
-  alternates: { canonical: "/changelog/" },
-};
+export const metadata: Metadata = pageMetadata({
+  title: "Changelog and Release Notes",
+  description: "Release notes for ResumeFold, the free ATS-friendly resume builder. New ATS checker rules, resume templates, import fixes and exports, by version.",
+  path: ROUTES.changelog,
+});
 
 const monthFormat = new Intl.DateTimeFormat("en", { month: "long", year: "numeric", timeZone: "UTC" });
 const dateFormat = new Intl.DateTimeFormat("en", { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" });
@@ -16,6 +17,7 @@ const dateFormat = new Intl.DateTimeFormat("en", { day: "numeric", month: "short
 export default function ChangelogPage() {
   return (
     <div className="device-safe min-h-dvh">
+      <JsonLd data={[breadcrumb("Changelog", ROUTES.changelog)]} />
       <FloatingNav brand={SITE.name} items={[
         { href: "/", label: "Home" },
         { href: "/#templates", label: "Templates" },

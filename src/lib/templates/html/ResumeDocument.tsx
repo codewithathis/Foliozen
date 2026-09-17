@@ -21,35 +21,39 @@ export function ResumeDocument({
   resume,
   template,
   variant,
+  decorative = false,
 }: {
   resume: Resume;
   template?: HtmlTemplateId;
   /** Extra class for the approximate LaTeX-style previews, e.g. "tex-classic" */
   variant?: string;
+  /** Thumbnails use plain elements so sample resumes don't add headings to the page outline. */
+  decorative?: boolean;
 }) {
   const t = variant ?? template ?? resume.meta.template;
   const paper = resume.meta.paper === "a4" ? " rs--a4" : "";
   return (
     <article className={`rs rs--${t}${paper}`} lang="en" style={variant ? undefined : styleVars(resume.meta.style)}>
-      <Header resume={resume} />
+      <Header resume={resume} decorative={decorative} />
       {orderedSections(resume)
         .filter((s) => sectionHasContent(resume, s))
         .map((s) => (
-          <Section key={s} id={s} resume={resume} />
+          <Section key={s} id={s} resume={resume} decorative={decorative} />
         ))}
     </article>
   );
 }
 
-function Header({ resume }: { resume: Resume }) {
+function Header({ resume, decorative }: { resume: Resume; decorative: boolean }) {
+  const Name = decorative ? "div" : "h1";
   const c = resume.contact;
   const parts = [c.email, c.phone, c.location, c.website, c.linkedin, c.github].filter(Boolean);
   return (
     <header className="rs-head">
       <div>
-        <h1 className="rs-name" data-field="contact.fullName">
+        <Name className="rs-name" data-field="contact.fullName">
           {c.fullName || "Your Name"}
-        </h1>
+        </Name>
         {c.headline && (
           <p className="rs-headline" data-field="contact.headline">
             {c.headline}
@@ -77,7 +81,8 @@ function Header({ resume }: { resume: Resume }) {
   );
 }
 
-function Section({ id, resume }: { id: SectionId; resume: Resume }) {
+function Section({ id, resume, decorative }: { id: SectionId; resume: Resume; decorative: boolean }) {
+  const Heading = decorative ? "div" : "h2";
   let body: ReactNode;
   switch (id) {
     case "summary":
@@ -163,7 +168,7 @@ function Section({ id, resume }: { id: SectionId; resume: Resume }) {
   }
   return (
     <section className="rs-sec" data-sec={id}>
-      <h2 className="rs-sec-h">{SECTION_HEADINGS[id]}</h2>
+      <Heading className="rs-sec-h">{SECTION_HEADINGS[id]}</Heading>
       {body}
     </section>
   );

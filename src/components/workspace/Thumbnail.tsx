@@ -31,9 +31,9 @@ export function Thumbnail({
   const scale = fittedWidth / W;
   const letter = { ...resume, meta: { ...resume.meta, paper: "letter" as const } };
   return (
-    <div ref={container} className="relative mx-auto w-full overflow-hidden rounded-[6px] bg-white" style={{ maxWidth: width, aspectRatio: `${W} / ${H}` }} aria-hidden>
+    <div ref={container} className="relative mx-auto w-full overflow-hidden rounded-[6px] bg-white" style={{ maxWidth: width, aspectRatio: `${W} / ${H}` }} aria-hidden data-nosnippet>
       <div className="absolute left-0 top-0 origin-top-left" style={{ width: W, transform: `scale(${scale})` }}>
-        <ResumeDocument resume={letter} template={template} variant={variant} />
+        <ResumeDocument resume={letter} template={template} variant={variant} decorative />
       </div>
     </div>
   );

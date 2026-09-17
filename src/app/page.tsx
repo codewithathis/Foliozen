@@ -1,94 +1,109 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { Thumbnail } from "@/components/workspace/Thumbnail";
+import { Disclosure } from "@/components/ui/Disclosure";
 import { FloatingNav } from "@/components/ui/FloatingNav";
+import { SiteFooter } from "@/components/ui/SiteFooter";
+import { JsonLd, OG_IMAGE, ROUTES, absoluteUrl, faqSchema, pageMetadata } from "@/lib/seo";
 import { sampleResume } from "@/lib/sample";
-import { HTML_TEMPLATES, LATEX_STYLES } from "@/lib/templates";
+import { HTML_TEMPLATES } from "@/lib/templates";
 import { RESUME_CSS, RESUME_FONTS_URL } from "@/lib/templates/html/styles";
 import { SITE } from "@/lib/site";
 
 /*
  * Landing copy. Voice: direct, warm, a bit wry. Short sentences. Second person.
- * No em dashes anywhere. Keywords we want to rank for appear naturally:
- * resume builder, ATS-friendly resume, free resume builder no sign-up,
- * LaTeX resume, Overleaf, resume checker, PDF, DOCX, open source.
+ * No em dashes anywhere. Keywords appear where a person would use them, never as lists:
+ * primary "free ATS-friendly resume builder"; supporting "resume builder no sign-up",
+ * "no watermark", "ATS resume templates", "ATS score / resume checker", "job description
+ * keywords", "PDF / DOCX", "LaTeX resume", "Overleaf", "open source", "private".
+ * Headings mirror common searches, e.g. "How to make an ATS-friendly resume".
  */
 
 const FAQ: { q: string; a: string }[] = [
   {
+    q: "Is this resume builder really free?",
+    a: "Yes. Every template, the ATS checker and every download are free, with no trial, subscription or watermark. ResumeFold is open source under the MIT License.",
+  },
+  {
+    q: "Do I need to sign up?",
+    a: "No. Open the resume builder and start typing. Drafts save in your browser, and a JSON backup moves them to another device.",
+  },
+  {
     q: "Can I upload my existing resume?",
-    a: "Yes. Upload a PDF, DOCX or TXT in the builder, review the extracted fields, then compare it with a job posting and export. Reading happens on this device. Scanned PDFs need selectable text first.",
+    a: "Yes. Upload a PDF, DOCX or TXT and it is read on your device. You get an ATS score for the file and editable fields for a new draft.",
   },
   {
-    q: "Is it free?",
-    a: "Yes. Every layout and export is free, with no trial, subscription or watermark.",
+    q: "Should I download a PDF or DOCX?",
+    a: "Whatever the job posting asks for. A text-based PDF suits most applicant tracking systems. DOCX is safer for older portals such as Taleo and iCIMS.",
   },
   {
-    q: "Do I need an account?",
-    a: "No. Drafts save in this browser. Export a JSON backup to move them to another device.",
-  },
-  {
-    q: "What makes a resume ATS-friendly?",
-    a: "One column, clear section names and selectable text. Use the checker to catch missing details and weak bullets before exporting.",
-  },
-  {
-    q: "Does it write my resume?",
-    a: "No. You write it. The checker uses rules to suggest improvements, without AI or generated text.",
-  },
-  {
-    q: "Can I use Overleaf?",
-    a: "Yes. Choose a LaTeX style, then open your resume in Overleaf. You can also edit and compile it here.",
-  },
-  {
-    q: "Where is my data stored?",
-    a: "Drafts and exports stay in your browser. Source is sent out only if you choose Overleaf or approve the optional remote LaTeX compiler.",
-  },
-  {
-    q: "Can I contribute?",
-    a: "Yes. ResumeFold is open source. See CONTRIBUTING.md for setup and ways to help.",
+    q: "Is my resume data private?",
+    a: "Yes. Drafts stay in your browser and PDF and DOCX files are built on your device. Your LaTeX source only leaves if you choose Overleaf or the optional remote compiler.",
   },
 ];
 
 const RULES: [string, string][] = [
-  ["One column", "Sidebars and two-column skills grids read out of order in Workday and Taleo."],
-  ["No tables or text boxes", "Cells get mashed into one string. Text-box contents are often skipped entirely."],
-  ["Contact details in the body", "Many parsers strip page headers and footers. Put your email where they can find it."],
-  ["Standard section names", "“Work Experience”, “Education”, “Skills”. Not “Where I’ve Been”."],
-  ["Real text, real fonts", "No icons standing in for labels, no text as an image, no wide letter-spacing that splits words."],
-  ["Consistent dates", "One format everywhere. Parsers work out your tenure from them."],
+  ["One column", "Sidebars and two-column skills grids are often read out of order by Workday and Taleo."],
+  ["No tables or text boxes", "Table cells get merged into one line, and text-box content is often skipped entirely."],
+  ["Contact details in the body", "Many resume parsers skip page headers and footers. Put your email and phone where they can find them."],
+  ["Standard section headings", "“Work Experience”, “Education”, “Skills”. Not “Where I’ve Been”."],
+  ["Real text, standard fonts", "No icons standing in for labels, no text inside images, and no wide letter-spacing that splits words apart."],
+  ["Consistent dates", "One date format everywhere. Applicant tracking systems work out your years of experience from them."],
 ];
 
+const STEPS: [string, string][] = [
+  ["Pick a template or upload your resume", "Four ATS-friendly layouts, or your own PDF or DOCX."],
+  ["Add your details", "The live preview updates as you type."],
+  ["Check your ATS score", "Each issue links to the field that fixes it."],
+  ["Match the job description", "See which keywords you already cover."],
+  ["Download", "PDF, DOCX or LaTeX for Overleaf."],
+];
+
+/** Landing-page descriptions for each layout. The builder keeps its shorter labels. */
+const TEMPLATE_COPY: Record<string, string> = {
+  standard: "For most jobs.",
+  student: "For students and new graduates.",
+  combination: "For career changers.",
+  senior: "For senior professionals.",
+};
+
+export const metadata: Metadata = pageMetadata({
+  title: SITE.title,
+  absoluteTitle: true,
+  description: SITE.description,
+  path: ROUTES.home,
+});
+
 export default function Home() {
-  const thisYear = new Date().getFullYear();
-  const years = thisYear > SITE.since ? `${SITE.since}–${thisYear}` : String(SITE.since);
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "SoftwareApplication",
-        name: SITE.name,
-        applicationCategory: "BusinessApplication",
-        operatingSystem: "Web",
-        description: SITE.tagline,
-        offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
-        url: SITE.url,
-        ...(SITE.repo ? { codeRepository: SITE.repo } : {}),
-      },
-      {
-        "@type": "FAQPage",
-        mainEntity: FAQ.map((f) => ({
-          "@type": "Question",
-          name: f.q,
-          acceptedAnswer: { "@type": "Answer", text: f.a },
-        })),
-      },
-    ],
-  };
+  const website = `${SITE.url}/#website`;
+  const organization = `${SITE.url}/#organization`;
+  const jsonLd = [
+    { "@type": "Organization", "@id": organization, name: SITE.name, url: absoluteUrl(ROUTES.home), logo: absoluteUrl("/apple-touch-icon.png"), ...(SITE.repo ? { sameAs: [SITE.repo] } : {}) },
+    { "@type": "WebSite", "@id": website, name: SITE.name, url: absoluteUrl(ROUTES.home), description: SITE.description, inLanguage: "en", publisher: { "@id": organization } },
+    {
+      "@type": "WebApplication",
+      name: SITE.name,
+      url: absoluteUrl(ROUTES.build),
+      description: SITE.tagline,
+      applicationCategory: "BusinessApplication",
+      operatingSystem: "Any",
+      browserRequirements: "Requires JavaScript and a modern web browser.",
+      isAccessibleForFree: true,
+      offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+      featureList: ["ATS resume checker", "Resume upload from PDF, DOCX or TXT", "Job description keyword matching", "PDF and DOCX export", "LaTeX export and Overleaf integration", "In-browser LaTeX compiler"],
+      image: absoluteUrl(OG_IMAGE.url),
+      publisher: { "@id": organization },
+      isPartOf: { "@id": website },
+      ...(SITE.repo ? { codeRepository: SITE.repo } : {}),
+    },
+    faqSchema(FAQ),
+  ];
 
   return (
     <div className="device-safe min-h-dvh">
       <link rel="stylesheet" href={RESUME_FONTS_URL} />
       <style dangerouslySetInnerHTML={{ __html: RESUME_CSS }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <JsonLd data={jsonLd} />
 
       {/* Header: one persistent floating pill that condenses as you scroll */}
       <FloatingNav
@@ -97,7 +112,7 @@ export default function Home() {
           { href: "#ats", label: "ATS checker" },
           { href: "#templates", label: "Templates" },
           { href: "#latex", label: "LaTeX" },
-          { href: "#why", label: "Why" },
+          { href: "#how", label: "How it works" },
           { href: "#faq", label: "FAQ" },
         ]}
         cta={{ href: "/build", label: "Build my resume" }}
@@ -107,12 +122,12 @@ export default function Home() {
         {/* Hero */}
         <section className="tile mt-3 grid min-w-0 grid-cols-1 items-center gap-8 overflow-hidden px-5 py-8 sm:mt-6 sm:gap-10 sm:px-8 sm:py-12 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)] lg:px-16 lg:py-16">
           <div>
-            <p className="text-sm font-medium text-signal">Free. Open source. No sign-up.</p>
+            <p className="text-sm font-medium text-signal">Free. No sign-up. No watermark.</p>
             <h1 className="mt-3 font-display text-xl font-bold leading-[1.1] sm:text-2xl lg:text-3xl lg:leading-[1.06]">
-              Build an ATS-friendly resume.
+              Free ATS-friendly resume builder
             </h1>
-            <p className="mt-5 max-w-[48ch] text-md text-ink-2">
-              Pick a layout, add your details, and check your resume. Export PDF, DOCX or LaTeX for free.
+            <p className="mt-5 max-w-[44ch] text-md text-ink-2">
+              Pick a template, check your ATS score, and download a PDF or DOCX. Your drafts stay in your browser.
             </p>
             <div className="mt-8 flex flex-col gap-3 min-[400px]:flex-row min-[400px]:flex-wrap min-[400px]:items-center">
               <Link href="/build" className="btn btn-primary">
@@ -122,7 +137,6 @@ export default function Home() {
                 See the templates
               </a>
             </div>
-            <p className="mt-6 text-sm text-ink-3">Drafts save in this browser.</p>
           </div>
           <div className="relative mx-auto min-w-0 w-full max-w-[240px] sm:max-w-[440px]">
             <div className="rounded-[6px]" style={{ boxShadow: "var(--shadow-sheet)" }}>
@@ -136,8 +150,9 @@ export default function Home() {
           <Bento
             id="ats"
             tint="bg-tint-sage"
-            title="Know what to fix."
-            body="Check missing details, weak bullets and keywords from a job description."
+            title="Check your ATS score."
+            body="See what parsers miss and which job keywords you cover."
+            link={[ROUTES.atsChecker, "How the ATS checker works"]}
           >
             <div className="mt-6 flex items-center gap-4">
               <Ring value={92} />
@@ -149,8 +164,8 @@ export default function Home() {
           </Bento>
           <Bento
             tint="bg-tint-sky"
-            title="One resume. Every format."
-            body="Your preview, PDF, DOCX and LaTeX use the same details."
+            title="PDF, DOCX or LaTeX."
+            body="One set of details. Every format matches."
           >
             <div className="mt-6 flex flex-wrap gap-2">
               {["PDF", "DOCX", ".tex", "Overleaf"].map((t) => (
@@ -163,7 +178,8 @@ export default function Home() {
           <Bento
             tint="bg-tint-lavender"
             title="LaTeX, built in."
-            body="Edit and compile in your browser, or continue in Overleaf."
+            body="Compile in your browser or open in Overleaf."
+            link={[ROUTES.latexStudio, "Open the LaTeX editor"]}
           >
             <pre className="mt-6 hidden overflow-hidden rounded-2xl bg-paper/80 p-4 font-mono text-[12px] leading-relaxed text-ink-2 sm:block">
               {`\\vEntry{Senior Engineer}\n  {Feb 2023 -- Present}\n  {Northwind Payments}`}
@@ -175,18 +191,18 @@ export default function Home() {
         <section id="templates" className="mt-12 sm:mt-20">
           <div className="flex items-end justify-between gap-6">
             <div>
-              <h2 className="font-display text-xl font-bold">Choose your layout.</h2>
+              <h2 className="font-display text-xl font-bold">ATS-friendly resume templates</h2>
               <p className="mt-1 max-w-[60ch] text-ink-2">
-                Four single-column layouts. Tune fonts, spacing and colour in the builder.
+                Four single-column layouts that applicant tracking systems read in order.
               </p>
             </div>
             <Link href="/build" className="link hidden text-sm md:inline">
-              Compare them in the builder
+              Compare templates in the builder
             </Link>
           </div>
           <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {HTML_TEMPLATES.map((t) => (
-              <ProductCard key={t.id} name={t.name} description={t.bestFor} href="/build">
+              <ProductCard key={t.id} name={`${t.name} resume template`} description={TEMPLATE_COPY[t.id] ?? t.bestFor} href="/build">
                 <Thumbnail resume={sampleResume} template={t.id} width={220} />
               </ProductCard>
             ))}
@@ -194,47 +210,44 @@ export default function Home() {
         </section>
 
         {/* LaTeX styles */}
-        <section id="latex" className="mt-12 sm:mt-20">
+        <section id="latex" className="tile mt-12 flex flex-col gap-4 px-5 py-6 sm:mt-20 sm:flex-row sm:items-center sm:justify-between sm:px-8">
           <div>
-            <h2 className="font-display text-xl font-bold">Prefer LaTeX?</h2>
-            <p className="mt-1 max-w-[60ch] text-ink-2">
-              Four original styles. Compile here or open in Overleaf.
-            </p>
+            <h2 className="font-display text-lg font-bold">LaTeX resume templates</h2>
+            <p className="mt-1 text-sm text-ink-2">Four styles, ready to compile here or open in Overleaf.</p>
           </div>
-          <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {LATEX_STYLES.map((t) => (
-              <ProductCard key={t.id} name={t.name} description={t.detail} href="/build" badge={t.atsSafe ? undefined : "Humans only"}>
-                <Thumbnail resume={sampleResume} variant={`tex-${t.id}`} width={220} />
-              </ProductCard>
-            ))}
-          </div>
+          <Link href={ROUTES.latexTemplates} className="btn btn-secondary shrink-0">
+            See LaTeX templates
+          </Link>
         </section>
 
-        {/* Explainer */}
-        <details className="group tile mt-12 px-5 py-5 sm:mt-20 sm:px-8 sm:py-8">
-          <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-4 font-display text-lg font-bold [&::-webkit-details-marker]:hidden">
-            <span>What makes a resume ATS-friendly?</span><DisclosureIcon />
-          </summary>
-          <p className="mb-5 mt-3 text-sm text-ink-2">Keep the structure simple so tracking systems can read your details.</p>
-          <ul className="grid gap-4 text-sm sm:grid-cols-2">
-            {RULES.map(([t, d]) => (
-              <li key={t} className="rounded-2xl bg-paper/70 p-4">
-                <p className="font-medium">{t}</p>
-                <p className="mt-1 text-ink-2">{d}</p>
-              </li>
-            ))}
-          </ul>
-        </details>
-
-        {/* Why this exists */}
-        <section id="why" className="mt-12 grid gap-8 sm:mt-20 md:grid-cols-[1fr_2fr]">
+        {/* How it works */}
+        <section id="how" className="mt-12 grid gap-8 sm:mt-20 md:grid-cols-[1fr_2fr]">
           <div>
-            <h2 className="font-display text-xl font-bold">Why ResumeFold?</h2>
+            <h2 className="font-display text-xl font-bold">How to make an ATS-friendly resume</h2>
           </div>
-          <div className="max-w-[62ch] space-y-4 text-ink-2">
-            <p>
-              A free resume builder without accounts or subscriptions. Your words stay yours, and your drafts stay in your browser.
-            </p>
+          <div>
+            <ol className="divide-y divide-rule">
+              {STEPS.map(([title, body], index) => (
+                <li key={title} className="flex items-baseline gap-4 py-3">
+                  <span className="w-5 shrink-0 font-mono text-sm text-ink-3" aria-hidden>
+                    {index + 1}
+                  </span>
+                  <p>
+                    <span className="font-medium">{title}.</span> <span className="text-ink-2">{body}</span>
+                  </p>
+                </li>
+              ))}
+            </ol>
+            <Disclosure className="mt-4 border-t border-rule pt-2" summaryClassName="py-2 font-medium" bodyClassName="pb-2 pt-2" summary="What makes a resume ATS-friendly?">
+              <ul className="grid gap-x-6 gap-y-3 text-sm sm:grid-cols-2">
+                {RULES.map(([t, d]) => (
+                  <li key={t}>
+                    <p className="font-medium">{t}</p>
+                    <p className="mt-0.5 text-ink-2">{d}</p>
+                  </li>
+                ))}
+              </ul>
+            </Disclosure>
           </div>
         </section>
 
@@ -245,72 +258,39 @@ export default function Home() {
           </div>
           <div className="divide-y divide-rule">
             {FAQ.map((f) => (
-              <details key={f.q} name="resumefold-faq" className="group py-2">
-                <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-4 py-2 font-medium [&::-webkit-details-marker]:hidden">
-                  <span>{f.q}</span><DisclosureIcon />
-                </summary>
-                <p className="pb-3 pt-1 text-sm text-ink-2">{f.a}</p>
-              </details>
+              <Disclosure key={f.q} group="faq" className="py-2" summaryClassName="py-2 font-medium" bodyClassName="pb-3 pt-1" summary={f.q}>
+                <p className="max-w-[60ch] text-sm text-ink-2">{f.a}</p>
+              </Disclosure>
             ))}
           </div>
         </section>
 
         {/* Closing */}
         <section className="tile mt-12 px-5 py-10 text-center sm:mt-20 sm:px-8 sm:py-14 md:px-16">
-          <h2 className="font-display text-xl font-bold md:text-2xl">Ready to start?</h2>
-          <p className="mx-auto mt-3 max-w-[44ch] text-ink-2">Use the sample or start with a blank page.</p>
+          <h2 className="font-display text-xl font-bold md:text-2xl">Ready to build your resume?</h2>
+          <p className="mx-auto mt-3 max-w-[40ch] text-ink-2">It’s free, and it takes a few minutes.</p>
           <Link href="/build" className="btn btn-primary mt-8">
             Build my resume
           </Link>
         </section>
       </main>
 
-      <footer className="mx-auto mt-12 max-w-[1440px] break-words px-4 pb-[max(40px,env(safe-area-inset-bottom))] sm:mt-16 sm:px-6">
-        <div className="grid gap-4 border-t border-rule pt-6 text-xs text-ink-3 md:grid-cols-[1fr_auto]">
-          <div className="space-y-1.5">
-            <p>
-              &copy; {years} {SITE.owner}. All rights reserved.
-              {" "}Source code is available under the {SITE.license} License
-              {SITE.repo ? (
-                <>
-                  {" "}
-                  <a className="link" href={SITE.repo} rel="noopener">
-                    on GitHub
-                  </a>
-                </>
-              ) : null}
-              .
-            </p>
-            <details className="group">
-              <summary className="flex min-h-11 cursor-pointer list-none items-center gap-3 text-ink-2 [&::-webkit-details-marker]:hidden">Privacy and project details<DisclosureIcon /></summary>
-              <p className="mb-2">
-                Drafts stay in this browser. PDF and DOCX exports are built locally. Choosing Overleaf or approving the optional remote
-                LaTeX compiler sends your source to that service.
-              </p>
-              <p>
-                Overleaf, Workday, Taleo, iCIMS, Greenhouse and Lever are trademarks of their respective owners. {SITE.name} is an independent
-                project and is not affiliated with or endorsed by any of them.
-              </p>
-            </details>
-          </div>
-          <nav className="flex min-h-11 flex-wrap items-center gap-x-6 gap-y-1 md:justify-end" aria-label="Footer">
-            <a className="inline-flex min-h-11 items-center hover:text-ink" href="#templates">Templates</a>
-            <a className="inline-flex min-h-11 items-center hover:text-ink" href="#faq">FAQ</a>
-            <Link className="inline-flex min-h-11 items-center hover:text-ink" href="/build">Builder</Link>
-            <Link className="inline-flex min-h-11 items-center hover:text-ink" href="/changelog">Changelog</Link>
-          </nav>
-        </div>
-      </footer>
+      <SiteFooter />
     </div>
   );
 }
 
-function Bento({ tint, title, body, children, id }: { tint: string; title: string; body: string; children?: React.ReactNode; id?: string }) {
+function Bento({ tint, title, body, children, id, link }: { tint: string; title: string; body: string; children?: React.ReactNode; id?: string; link?: [string, string] }) {
   return (
     <div id={id} className={`min-w-0 rounded-card p-6 sm:p-8 ${tint}`}>
-      <h3 className="font-display text-lg font-bold leading-snug">{title}</h3>
+      <h2 className="font-display text-lg font-bold leading-snug">{title}</h2>
       <p className="mt-2 text-sm text-ink-2">{body}</p>
       {children}
+      {link && (
+        <Link href={link[0]} className="link mt-6 inline-block text-sm">
+          {link[1]}
+        </Link>
+      )}
     </div>
   );
 }
@@ -346,10 +326,6 @@ function ProductCard({
       </div>
     </Link>
   );
-}
-
-function DisclosureIcon() {
-  return <svg aria-hidden width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="shrink-0 transition-transform group-open:rotate-180"><path d="m6 9 6 6 6-6" /></svg>;
 }
 
 function Ring({ value }: { value: number }) {

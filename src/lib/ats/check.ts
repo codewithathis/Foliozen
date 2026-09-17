@@ -135,13 +135,18 @@ export function checkResume(r: Resume): AtsReport {
 
   words += r.summary.trim() ? r.summary.trim().split(/\s+/).length : 0;
 
+  let noLocation = 0;
   r.experience.forEach((e, i) => {
     const missing: string[] = [];
     if (!e.title.trim()) missing.push("title");
     if (!e.company.trim()) missing.push("company");
-    if (!e.location.trim()) missing.push("location");
     if (!e.start) missing.push("start date");
     if (!e.current && !e.end) missing.push("end date");
+    // Location is optional for parsers, so it is one tip for all roles instead of a warning each.
+    if (!e.location.trim()) {
+      if (missing.length) missing.push("location");
+      else noLocation++;
+    }
     if (missing.length)
       issues.push({
         id: `E${i}m`,
@@ -156,6 +161,15 @@ export function checkResume(r: Resume): AtsReport {
       issues.push({ id: `E${i}d`, severity: "fail", title: `${e.title || `Role ${i + 1}`}: end date before start date`, detail: "The tenure maths breaks.", step: "experience" });
     scanBullets(e.bullets);
   });
+
+  if (noLocation)
+    issues.push({
+      id: "E-location",
+      severity: "info",
+      title: noLocation === 1 ? "One role has no location" : `${noLocation} roles have no location`,
+      detail: "Some portals fill a job's city from it. “Bengaluru, India” or “Remote” is enough.",
+      step: "experience",
+    });
 
   // reverse-chronological check
   const starts = r.experience.map((e) => e.start).filter(Boolean);

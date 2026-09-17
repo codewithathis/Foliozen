@@ -40,8 +40,11 @@ export function Workspace() {
 
   if (!hydrated) {
     return (
-      <div className="grid h-dvh place-items-center">
-        <span className="text-sm text-ink-3">Opening your drafts…</span>
+      <div className="grid h-dvh place-items-center text-center">
+        <div>
+          <h1 className="font-display text-md font-bold">Resume builder</h1>
+          <p className="mt-1 text-sm text-ink-3">Opening your drafts…</p>
+        </div>
       </div>
     );
   }

@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import { THEME_BOOT_SCRIPT } from "@/lib/theme";
 import { SITE } from "@/lib/site";
+import { OG_IMAGE } from "@/lib/seo";
 
 const googleSans = localFont({
   src: "./fonts/google-sans-latin.woff2",
@@ -23,42 +24,48 @@ const headingFont = localFont({
   display: "swap",
 });
 
-const description =
-  "Free ATS-friendly resume builder. Live preview, a checker that names what to fix, and exports to PDF, DOCX and LaTeX you can open in Overleaf. Open source. No sign-up.";
+const description = SITE.description;
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE.url),
   title: {
-    default: `${SITE.name}: free ATS-friendly resume builder with LaTeX and Overleaf export`,
+    default: SITE.title,
     template: `%s · ${SITE.name}`,
   },
   description,
+  authors: [{ name: SITE.owner, url: SITE.repo || SITE.url }],
+  creator: SITE.owner,
+  publisher: SITE.owner,
+  category: "productivity",
+  formatDetection: { telephone: false, email: false, address: false },
+  // Set NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION at build time to verify the site in Google Search Console.
+  ...(process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION ? { verification: { google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION } } : {}),
+  // Google ignores meta keywords; other engines may still read them. The page copy is what ranks.
   keywords: [
-    "resume builder",
     "free resume builder",
-    "ATS resume builder",
-    "ATS-friendly resume template",
-    "resume checker",
-    "ATS resume checker",
-    "LaTeX resume template",
-    "Overleaf resume",
-    "CV builder",
-    "resume to PDF",
-    "resume to DOCX",
-    "open source resume builder",
+    "ATS-friendly resume builder",
     "resume builder no sign up",
+    "resume builder no watermark",
+    "ATS resume templates",
+    "ATS resume checker",
+    "ATS score checker",
+    "resume keyword scanner",
+    "LaTeX resume templates",
+    "Overleaf resume template",
+    "resume maker",
+    "CV maker",
+    "open source resume builder",
   ],
   applicationName: SITE.name,
-  openGraph: {
-    type: "website",
-    siteName: SITE.name,
-    title: `${SITE.name}: a resume that gets past the robots and still sounds like you`,
-    description,
-    url: SITE.url,
+  // Pages set their own canonical URL and social tags through pageMetadata().
+  openGraph: { type: "website", siteName: SITE.name, locale: "en_US", title: SITE.title, description, images: [OG_IMAGE] },
+  twitter: { card: "summary_large_image", title: SITE.title, description, images: [OG_IMAGE] },
+  // Setting icons here replaces the icon.svg file convention, so both are listed. Icon URLs are not resolved against metadataBase.
+  icons: {
+    icon: [{ url: `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/icon.svg`, type: "image/svg+xml", sizes: "any" }],
+    apple: [{ url: `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/apple-touch-icon.png`, sizes: "180x180", type: "image/png" }],
   },
-  twitter: { card: "summary_large_image", title: `${SITE.name}: free ATS-friendly resume builder`, description },
-  robots: { index: true, follow: true },
-  alternates: { canonical: "/" },
+  robots: { index: true, follow: true, googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1 } },
 };
 
 export const viewport: Viewport = {

@@ -1,7 +1,8 @@
 "use client";
 
 import { useDeferredValue, useEffect, useId, useMemo, useRef, useState } from "react";
-import { checkResume, keywordMatch, suggestKeywords, type Issue } from "@/lib/ats/check";
+import { checkResume, keywordMatch, suggestKeywords, type AtsReport, type Issue } from "@/lib/ats/check";
+import { checkUpload } from "@/lib/ats/upload";
 import { useActiveResume, useResumeStore } from "@/lib/store";
 import { useUiStore } from "@/lib/focus";
 import { latexForExport } from "@/lib/latex/source";
@@ -41,22 +42,11 @@ export function StepReview({ goTo }: { goTo: (s: StepId) => void }) {
   return (
     <div className="grid gap-10">
       <ResumeUpload onImported={() => goTo("review")} />
+      <UploadReport goTo={goTo} />
       <ImportNotes />
+      {r.meta.imported.text && <h2 className="font-display text-lg font-bold">Your draft</h2>}
       <ScoreCard score={report.score} ready={report.ready} stats={report.stats} />
-
-      {report.issues.length > 0 && (
-        <section className="grid gap-3">
-          <h3 className="font-display text-md font-bold">
-            {report.issues.length} thing{report.issues.length > 1 ? "s" : ""} to look at
-          </h3>
-          <ul className="grid gap-2">
-            {report.issues.map((i) => (
-              <IssueRow key={i.id} issue={i} onFix={i.step ? () => goTo(i.step!) : undefined} />
-            ))}
-          </ul>
-        </section>
-      )}
-
+      <IssueList report={report} goTo={goTo} />
       <Passes passes={report.passes} />
 
       <Keywords />
@@ -68,7 +58,43 @@ export function StepReview({ goTo }: { goTo: (s: StepId) => void }) {
 
 /* ------------------------------------------------------------------ */
 
-function ScoreCard({ score, ready, stats }: { score: number; ready: boolean; stats: { words: number; bullets: number; quantified: number } }) {
+function IssueList({ report, goTo }: { report: AtsReport; goTo: (s: StepId) => void }) {
+  if (!report.issues.length) return null;
+  return (
+    <section className="grid gap-3">
+      <h3 className="font-display text-md font-bold">
+        {report.issues.length} thing{report.issues.length > 1 ? "s" : ""} to look at
+      </h3>
+      <ul className="grid gap-2">
+        {report.issues.map((i) => (
+          <IssueRow key={i.id} issue={i} onFix={i.step ? () => goTo(i.step!) : undefined} />
+        ))}
+      </ul>
+    </section>
+  );
+}
+
+/** Scores the uploaded file as a parser reads it, separate from the rebuilt draft. */
+function UploadReport({ goTo }: { goTo: (s: StepId) => void }) {
+  const imported = useActiveResume().meta.imported;
+  const report = useMemo(() => (imported.text ? checkUpload(imported.text) : null), [imported.text]);
+  if (!report) return null;
+  return (
+    <section className="grid gap-4">
+      <div>
+        <h2 className="font-display text-lg font-bold">Your uploaded file</h2>
+        <p className="mt-1 text-sm text-ink-2 [overflow-wrap:anywhere]">
+          What an applicant tracking system can read from {imported.filename === "Pasted resume.txt" ? "the text you pasted" : imported.filename}, before any of your edits here.
+        </p>
+      </div>
+      <ScoreCard score={report.score} ready={report.ready} stats={report.stats} source="upload" />
+      <IssueList report={report} goTo={goTo} />
+      {report.passes.length > 0 && <Passes passes={report.passes} />}
+    </section>
+  );
+}
+
+function ScoreCard({ score, ready, stats, source = "draft" }: { score: number; ready: boolean; stats: { words: number; bullets: number; quantified: number }; source?: "draft" | "upload" }) {
   const R = 44;
   const C = 2 * Math.PI * R;
   const [shown, setShown] = useState(0);
@@ -102,15 +128,23 @@ function ScoreCard({ score, ready, stats }: { score: number; ready: boolean; sta
       </div>
       <div className="min-w-0">
         <h2 className="font-display text-xl font-bold leading-tight" key={String(ready)}>
-          <span className="step-in inline-block">{ready ? "Ready to send." : score >= 60 ? "Nearly there." : "Not yet. Fix these first."}</span>
+          <span className="step-in inline-block">
+            {source === "upload"
+              ? ready ? "This file reads cleanly." : score >= 60 ? "Mostly readable." : "A parser will miss parts of this."
+              : ready ? "Ready to send." : score >= 60 ? "Nearly there." : "Not yet. Fix these first."}
+          </span>
         </h2>
         <p className="mt-1 text-sm text-ink-2">
-          {ready
-            ? "The local structure checks pass. Review your details and the target job before sending."
-            : "Fix the items below. Each one links to the step that changes it."}
+          {source === "upload"
+            ? ready
+              ? "Sections, contact details and dates all come through as text."
+              : "These are the things a parser would miss or misfile. Fix them in the original, or export a clean copy from here."
+            : ready
+              ? "The local structure checks pass. Review your details and the target job before sending."
+              : "Fix the items below. Each one links to the step that changes it."}
         </p>
         <p className="mt-2 text-xs text-ink-3">
-          Draft structure · {stats.words} words · {stats.bullets} bullets · {stats.quantified} quantified
+          {source === "upload" ? "Uploaded file" : "Draft structure"} · {stats.words} words · {stats.bullets} bullets · {stats.quantified} quantified
         </p>
       </div>
     </div>
@@ -255,7 +289,7 @@ function ImportNotes() {
   return (
     <section className="card grid min-w-0 gap-3 p-4">
       <h3 className="font-display text-md font-bold">Import notes</h3>
-      <p className="break-all text-xs text-ink-3">From {imported.filename}. Analysis checks the new draft’s structure, not the original file’s layout.</p>
+      <p className="break-all text-xs text-ink-3">From {imported.filename}. The file score above reads this text. The draft score below reads your edited fields.</p>
       <ul className="list-disc space-y-1 pl-4 text-xs text-ink-2">{imported.warnings.map((warning) => <li key={warning}>{warning}</li>)}</ul>
       <details>
         <summary className="flex min-h-11 cursor-pointer items-center text-sm font-medium">Original extracted text</summary>

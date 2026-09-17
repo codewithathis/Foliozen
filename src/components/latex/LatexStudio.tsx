@@ -47,7 +47,15 @@ export function LatexStudio() {
   // Mount the editor only after drafts are loaded from storage, so its initial
   // source is the user's draft (and their hand edits), not the built-in sample.
   const hydrated = useResumeStore((s) => s.hydrated);
-  if (!hydrated) return <div className="grid h-dvh place-items-center text-sm text-ink-3">Opening your draft…</div>;
+  if (!hydrated)
+    return (
+      <div className="grid h-dvh place-items-center text-center">
+        <div>
+          <h1 className="font-display text-md font-bold">LaTeX resume editor</h1>
+          <p className="mt-1 text-sm text-ink-3">Opening your draft…</p>
+        </div>
+      </div>
+    );
   return <Studio />;
 }
 

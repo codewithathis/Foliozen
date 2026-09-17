@@ -8,7 +8,9 @@ PDF loading uses PDF.js's official legacy build and its matching worker. Both in
 
 Contact details and standard section headings are recognised with deterministic rules. Entries with clear date ranges become editable fields. Year-only or ambiguous dates are left blank instead of inventing months. Unsupported sections and unmapped text remain in Import notes and JSON backups. Users must place that text in the appropriate fields before exporting. Original formatting is not preserved.
 
-The comparison can use the edited draft or the original extracted text. The structural checklist describes the formatted draft, not the uploaded document. A successful upload does not certify the original file's ATS compatibility.
+Headings are matched after collapsing letter spacing ("W O R K E X P E R I E N C E") and accept extended names such as "Skills & Capabilities". PDF lines are rebuilt from text positions: wide gaps become tabs, and bullet glyphs stored after the page text are put back on the line beside them. Entry headings split on pipes, tabs and spaced dashes, except inside brackets.
+
+The comparison can use the edited draft or the original extracted text. Uploads get two scores. The file score reads the extracted text the way a parser would: missing contact details, entries without dates, letter-spaced or renamed headings, link labels with no visible address, and text that fits no field. It skips the layout passes that only hold for ResumeFold's own exports. The draft score describes the formatted draft. Neither score certifies how a particular employer's system will read the file.
 
 ## Job-specific keywords
 

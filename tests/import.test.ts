@@ -3,39 +3,13 @@ import assert from "node:assert/strict";
 import JSZip from "jszip";
 import { spawnSync } from "node:child_process";
 import { resumePdf } from "./pdf-fixture";
+import { DESIGNER_TEXT, RESUME_TEXT } from "./resume-fixtures";
 import { installPdfCompatibility } from "../src/lib/pdf-compat.mjs";
-import { parseImportDate, parseResumeText } from "../src/lib/import/parse";
+import { findHeading, parseImportDate, parseResumeText } from "../src/lib/import/parse";
 import { MAX_FILE_BYTES, extractResumeText, readDocxXml, readFileBytes, validateResumeFile, validateDocxArchive } from "../src/lib/import/extract";
 import { ResumeReadError } from "../src/lib/import/errors";
 import { readPdfPageText } from "../src/lib/import/pdf-text";
 import type { TextContent } from "pdfjs-dist/types/src/display/api";
-
-export const RESUME_TEXT = `Alex Morgan
-Software Engineer
-alex.morgan@example.com | +1 415 555 0123 | Boston, MA
-https://linkedin.com/in/alexmorgan
-Summary
-Engineer building reliable services for financial reporting.
-Work Experience
-Software Engineer | Example Labs
-Jan 2023 - Present
-- Built Python and SQL services for 200 customers.
-- Reduced processing time by 35%.
-Developer | Earlier Labs
-Jun 2020 - Dec 2022
-- Built React and TypeScript dashboards.
-Education
-Example University | Bachelor of Science in Computer Science
-Sep 2016 - May 2020
-Skills
-Languages: Python, SQL, TypeScript
-Tools: React, Git, Docker
-Projects
-Budget Tracker | Python
-Jan 2024 - Feb 2024
-- Shipped a financial reporting tool.
-Certifications
-AWS Certified Developer`;
 
 test("maps a conventional resume without losing the original text", () => {
   const r = parseResumeText(RESUME_TEXT, "resume.txt");
@@ -232,4 +206,31 @@ test("reads native file-picker bytes and cleans up cancellation and provider fai
     const aborted = new AbortController(); aborted.abort(new Error("already cancelled"));
     assert.throws(() => readFileBytes(file, aborted.signal), /already cancelled/);
   } finally { globalThis.FileReader = Original; }
+});
+
+test("reads letter-spaced headings, dash separators, wrapped bullets and undated roles", () => {
+  const r = parseResumeText(DESIGNER_TEXT, "resume.pdf");
+  assert.equal(r.summary, "Designer focused on mobile interfaces and motion.");
+  assert.equal(r.contact.website, "jamierivera.design");
+  assert.deepEqual(r.experience.map((e) => [e.company, e.title, e.start, e.current]), [["Northwind", "Product Designer", "2026-04", true], ["Contoso & Fabrikam", "Product Design Intern", "", false]]);
+  assert.equal(r.experience[0].bullets.length, 2);
+  assert.match(r.experience[0].bullets[0], /by a third\.$/);
+  assert.equal(r.experience[1].bullets[0], "Contoso: Designed a loyalty program for Slash, a booking app.");
+  assert.deepEqual([r.projects[0].name, r.projects[0].start], ["Orbit", "2026-01"]);
+  assert.deepEqual(r.education.map((e) => [e.school, e.degree]), [["Example University", "B.Design in Product Design"], ["Example School", "Secondary (Class I – X)"]]);
+  assert.deepEqual(r.skills.map((g) => [g.category, g.items.length]), [["Design", 3], ["Product", 2]]);
+  assert.equal(findHeading("S K I L L S & CA PA B I L I T I E S")?.section, "skills");
+  assert.equal(findHeading("Work Experience")?.standard, true);
+  assert.equal(findHeading("Designed 3 apps."), null);
+  assert.equal(parseResumeText("Alex Morgan\nEducation\nExample University | Design 2021 - 2025").education[0].degree, "");
+});
+
+test("keeps PDF bullets stored after the page text and separates wide gaps", async () => {
+  const item = (str: string, x: number, y: number, width: number, hasEOL = false) => ({ str, dir: "ltr", transform: [1, 0, 0, 1, x, y], width, height: 8, fontName: "f", hasEOL });
+  const stream = new ReadableStream<TextContent>({ start(controller) {
+    controller.enqueue({ items: [item("Northwind", 50, 700, 40), item(" ", 90, 700, 3), item("— Designer", 93, 700, 40), item(" ", 133, 700, 300), item("Apr 2026 — Present", 450, 700, 60, true), item("Built flows.", 60, 686, 50, true)], styles: {}, lang: null });
+    controller.enqueue({ items: [item("•", 55, 686, 3, true), item("•", 55, 300, 3, true)], styles: {}, lang: null });
+    controller.close();
+  } });
+  assert.equal(await readPdfPageText({ streamTextContent: () => stream }, new AbortController().signal, 1000), "Northwind — Designer\tApr 2026 — Present\n• Built flows.");
 });
