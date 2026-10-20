@@ -13,9 +13,16 @@ const PAGE_H = { letter: 11 * 96, a4: (297 / 25.4) * 96 };
  * The centrepiece: a real-size sheet scaled to fit its pane. The sheet is the
  * only pure-white surface in the app so it reads as paper on the bone ground.
  */
-export function Preview({ resume, lift = false }: { resume: Resume; lift?: boolean }) {
+export function Preview({
+  resume,
+  lift = false,
+}: {
+  resume: Resume;
+  lift?: boolean;
+}) {
   const wrap = useRef<HTMLDivElement>(null);
   const sheet = useRef<HTMLDivElement>(null);
+  const lastFocused = useRef<string | null>(null);
   const [scale, setScale] = useState(0.6);
   const [pages, setPages] = useState(1);
   const focused = useFocusStore((s) => s.field);
@@ -39,30 +46,53 @@ export function Preview({ resume, lift = false }: { resume: Resume; lift?: boole
   useEffect(() => {
     const el = sheet.current;
     if (!el) return;
-    const ro = new ResizeObserver(() => setPages(Math.max(1, Math.ceil((el.scrollHeight - 1) / ph))));
+    const ro = new ResizeObserver(() =>
+      setPages(Math.max(1, Math.ceil((el.scrollHeight - 1) / ph))),
+    );
     ro.observe(el);
     return () => ro.disconnect();
-  }, [ph, resume]);
+  }, [ph]);
 
   // Spotlight the field being edited
   useEffect(() => {
     const el = sheet.current;
     if (!el) return;
     el.querySelectorAll(".rs-hi").forEach((n) => n.classList.remove("rs-hi"));
-    if (!focused) return;
-    const exact = el.querySelector<HTMLElement>(`[data-field="${CSS.escape(focused)}"]`);
-    const target = exact ?? el.querySelector<HTMLElement>(`[data-field^="${CSS.escape(focused)}"]`);
+    if (!focused) {
+      lastFocused.current = null;
+      return;
+    }
+    const exact = el.querySelector<HTMLElement>(
+      `[data-field="${CSS.escape(focused)}"]`,
+    );
+    const target =
+      exact ??
+      el.querySelector<HTMLElement>(`[data-field^="${CSS.escape(focused)}"]`);
     if (target) {
       target.classList.add("rs-hi");
-      target.scrollIntoView({ block: "nearest", behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth" });
+      if (lastFocused.current !== focused) {
+        target.scrollIntoView({
+          block: "nearest",
+          behavior: window.matchMedia("(prefers-reduced-motion: reduce)")
+            .matches
+            ? "instant"
+            : "smooth",
+        });
+        lastFocused.current = focused;
+      }
     }
   }, [focused, resume]);
 
   return (
-    <div ref={wrap} className="relative h-full w-full overflow-auto overscroll-contain scroll-thin px-3 pb-[max(40px,env(safe-area-inset-bottom))] pt-4 sm:px-6 sm:pt-6">
+    <div
+      ref={wrap}
+      className="relative h-full w-full overflow-auto overscroll-contain scroll-thin px-3 pb-[max(40px,env(safe-area-inset-bottom))] pt-4 sm:px-6 sm:pt-6"
+    >
       <link rel="stylesheet" href={RESUME_FONTS_URL} />
       <style dangerouslySetInnerHTML={{ __html: RESUME_CSS }} />
-      {resume.meta.style.css && <style dangerouslySetInnerHTML={{ __html: resume.meta.style.css }} />}
+      {resume.meta.style.css && (
+        <style dangerouslySetInnerHTML={{ __html: resume.meta.style.css }} />
+      )}
       <div
         className="mx-auto transition-[height] duration-200"
         style={{ width: pw * scale, height: Math.max(ph, pages * ph) * scale }}
@@ -73,7 +103,9 @@ export function Preview({ resume, lift = false }: { resume: Resume; lift?: boole
           style={{
             width: pw,
             transform: `scale(${scale})${lift ? " translateY(-4px)" : ""}`,
-            boxShadow: lift ? "var(--shadow-sheet-lift)" : "var(--shadow-sheet)",
+            boxShadow: lift
+              ? "var(--shadow-sheet-lift)"
+              : "var(--shadow-sheet)",
             background: "#fff",
           }}
         >
@@ -88,13 +120,22 @@ export function Preview({ resume, lift = false }: { resume: Resume; lift?: boole
               />
             ))}
           <div className="relative">
-            <ResumeDocument resume={resume} />
+            <ResumeDocument
+              resume={resume}
+              highlightKeywords={resume.meta.analysis.addedSkills.map(
+                (item) => item.term,
+              )}
+            />
           </div>
         </div>
       </div>
       <div className="pointer-events-none sticky bottom-2 mt-3 flex justify-center">
-        <span className="rounded-pill bg-paper px-3 py-1 text-xs font-medium text-ink-2" style={{ boxShadow: "var(--shadow-pop)" }}>
-          {pages} {pages === 1 ? "page" : "pages"} · {paper === "a4" ? "A4" : "Letter"} · {Math.round(scale * 100)}%
+        <span
+          className="rounded-control bg-paper px-3 py-1 text-xs font-medium text-ink-2"
+          style={{ boxShadow: "var(--shadow-pop)" }}
+        >
+          {pages} {pages === 1 ? "page" : "pages"} ·{" "}
+          {paper === "a4" ? "A4" : "Letter"} · {Math.round(scale * 100)}%
         </span>
       </div>
     </div>

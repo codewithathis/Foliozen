@@ -24,7 +24,7 @@ export const STEPS: Step[] = [
   {
     id: "template",
     label: "Template",
-    blurb: "Choose your layout and style.",
+    blurb: "Import a resume or choose a layout to begin.",
     progress: () => 1,
   },
   {
@@ -40,29 +40,37 @@ export const STEPS: Step[] = [
   {
     id: "experience",
     label: "Experience",
-    blurb: "Newest roles first. Show your impact with specific results.",
+    blurb: "Start with your latest role. Say what you did and what changed.",
     progress: (r) => {
       if (r.experience.length === 0) return 0;
-      const ok = r.experience.filter((e) => e.title && e.company && e.start && e.bullets.length > 0).length;
+      const ok = r.experience.filter(
+        (e) => e.title && e.company && e.start && e.bullets.length > 0,
+      ).length;
       return clamp(ok / r.experience.length);
     },
   },
   {
     id: "education",
     label: "Education",
-    blurb: "Degrees and schools. GPA only if it helps you.",
-    progress: (r) => (r.education.length > 0 && r.education.every((e) => e.school && e.degree) ? 1 : r.education.length ? 0.5 : 0),
+    blurb: "Add your education and any relevant coursework.",
+    progress: (r) =>
+      r.education.length > 0 && r.education.every((e) => e.school && e.degree)
+        ? 1
+        : r.education.length
+          ? 0.5
+          : 0,
   },
   {
     id: "skills",
     label: "Skills",
     blurb: "Group related skills, such as languages or tools.",
-    progress: (r) => clamp(r.skills.filter((g) => g.items.length > 0).length / 2),
+    progress: (r) =>
+      clamp(r.skills.filter((g) => g.items.length > 0).length / 2),
   },
   {
     id: "projects",
     label: "Projects",
-    blurb: "Show relevant projects, especially if you're new to work.",
+    blurb: "Add relevant projects and the part you played.",
     progress: (r) => (r.projects.length ? 1 : 0),
   },
   {

@@ -69,7 +69,7 @@ export function StylePanel() {
                 type="button"
                 onClick={() => set("accent", o.value)}
                 aria-pressed={on}
-                className={`flex min-h-11 items-center gap-2 rounded-pill py-1.5 pl-1.5 pr-3 text-sm font-medium transition-colors sm:min-h-0 ${
+                className={`flex min-h-11 items-center gap-2 rounded-control py-1.5 pl-1.5 pr-3 text-sm font-medium transition-colors sm:min-h-0 ${
                   on ? "bg-signal-soft text-signal-2" : "bg-paper-3 text-ink-2 hover:text-ink"
                 }`}
               >
@@ -96,7 +96,7 @@ export function StylePanel() {
               placeholder={".rs-name { letter-spacing: .02em }\n.rs--standard .rs-sec-h { border-bottom-width: 1.2pt }"}
             />
             <p className="mt-1.5 text-xs text-ink-3">
-              Applied to the preview and the PDF. Keep it to type and spacing. Columns, images and text boxes break parsers.
+              Applied to the preview and Print. Direct PDF downloads use the layout controls above. Keep CSS to type and spacing.
             </p>
           </div>
         )}
@@ -124,7 +124,7 @@ function Segmented<V extends string>({
   onChange: (v: V) => void;
 }) {
   return (
-    <div className="inline-flex max-w-full flex-wrap gap-1 rounded-2xl bg-paper-3 p-1 sm:rounded-pill" role="radiogroup">
+    <div className="inline-flex max-w-full flex-wrap gap-1 rounded-card bg-paper-3 p-1 sm:rounded-control" role="radiogroup">
       {options.map((o) => {
         const on = o.value === value;
         return (
@@ -134,7 +134,7 @@ function Segmented<V extends string>({
             role="radio"
             aria-checked={on}
             onClick={() => onChange(o.value)}
-            className={`min-h-11 rounded-pill px-3.5 py-1.5 text-sm font-medium transition-colors sm:min-h-0 ${
+            className={`min-h-11 rounded-control px-3.5 py-1.5 text-sm font-medium transition-colors sm:min-h-0 ${
               on ? "bg-paper text-ink shadow-[var(--shadow-pop)]" : "text-ink-2 hover:text-ink"
             }`}
           >

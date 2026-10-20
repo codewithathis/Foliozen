@@ -66,9 +66,9 @@ export function ResumeUpload({ onImported }: { onImported: () => void }) {
   const chooseFile = () => input.current?.click();
   const heading = state.kind === "review" ? "Check your resume" : state.kind === "paste" ? "Paste your resume" : "Import your resume";
   return (
-    <section className="tile grid min-w-0 gap-3 p-4 sm:p-5" aria-labelledby={`${id}-title`}>
+    <section className="resume-upload tile grid min-w-0 gap-3 p-4 sm:p-5" aria-labelledby={`${id}-title`}>
       <div>
-        <h2 ref={headingRef} tabIndex={-1} id={`${id}-title`} className="scroll-mt-4 font-display text-md font-bold outline-none">{heading}</h2>
+        <h2 ref={headingRef} tabIndex={-1} id={`${id}-title`} className="scroll-mt-4 font-display text-md font-medium outline-none">{heading}</h2>
         <p className="mt-1 text-xs text-ink-3">PDF, DOCX or TXT · up to 5 MB · stays on this device</p>
       </div>
       <input ref={input} type="file" accept=".pdf,.docx,.txt,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain" className="hidden" aria-label="Resume file" onChange={(event) => {

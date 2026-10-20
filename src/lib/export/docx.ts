@@ -11,6 +11,7 @@ import {
 } from "docx";
 import { orderedSections, sectionHasContent, SECTION_HEADINGS, type Resume, type SectionId } from "@/lib/schema";
 import { fmtMonth, fmtRange } from "@/lib/dates";
+import { exportDetails } from "./settings";
 
 /**
  * ATS-safe DOCX: one column, real Word heading styles (parsers key on them),
@@ -156,8 +157,11 @@ export async function renderDocx(r: Resume): Promise<Blob> {
   }
 
   const doc = new Document({
-    creator: "ResumeFold",
-    title: `${r.contact.fullName}, Resume`,
+    creator: exportDetails(r).author,
+    lastModifiedBy: exportDetails(r).author,
+    title: exportDetails(r).title,
+    description: "",
+    keywords: "",
     styles: {
       default: { document: { run: { font, size: base } } },
       paragraphStyles: [

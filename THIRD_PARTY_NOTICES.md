@@ -11,10 +11,11 @@ ResumeFold's own code is MIT licensed (see LICENSE). The deployed site also ship
 | [pdf.js](https://mozilla.github.io/pdf.js/) (`pdfjs-dist`) | extracts uploaded PDF text and renders compiled PDFs in the studio | Apache-2.0 |
 | [core-js](https://github.com/zloirock/core-js) | compatibility code included in PDF.js's legacy reader and worker; license notice in `public/licenses/core-js-LICENSE.txt` | MIT |
 | [docx](https://github.com/dolanmiu/docx) | builds the DOCX export | MIT |
+| [pdf-lib](https://pdf-lib.js.org/) / [fontkit](https://github.com/Hopding/fontkit) | builds text PDF downloads and sets PDF document details locally | MIT |
 | [JSZip](https://stuk.github.io/jszip/) | builds the .zip export | MIT or GPL-3.0 (used under MIT) |
 | [Zod](https://zod.dev), [Zustand](https://zustand.docs.pmnd.rs), [Immer](https://immerjs.github.io/immer/), [nanoid](https://github.com/ai/nanoid) | data model and state | MIT |
-| [Google Sans](https://fonts.google.com/specimen/Google+Sans), [Google Sans Code](https://fonts.google.com/specimen/Google+Sans+Code) | locally bundled interface typefaces; license notices in `src/app/fonts/` | SIL Open Font License 1.1 |
-| [Inter](https://rsms.me/inter/) | locally bundled heading typeface; license notice in `src/app/fonts/` | SIL Open Font License 1.1 |
+| [Google Sans Code](https://fonts.google.com/specimen/Google+Sans+Code) | locally bundled code and micro-label typeface; license notice in `src/app/fonts/` | SIL Open Font License 1.1 |
+| [Inter](https://rsms.me/inter/) | locally bundled interface typeface; license notice in `src/app/fonts/` | SIL Open Font License 1.1 |
 | [Source Sans 3](https://github.com/adobe-fonts/source-sans), [Source Serif 4](https://github.com/adobe-fonts/source-serif), [Lato](https://www.latofonts.com) | locally bundled resume preview and PDF typefaces; license notices in `public/fonts/` | SIL Open Font License 1.1 |
 
 ## The in-browser TeX engine (`public/tex/`)

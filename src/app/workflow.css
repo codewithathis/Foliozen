@@ -1,0 +1,417 @@
+.workflow-section {
+  display: block;
+}
+.workflow-heading {
+  text-align: center;
+  margin-bottom: 44px;
+}
+.workflow-panel {
+  max-width: 1320px;
+  margin-inline: auto;
+  padding: clamp(30px, 5vw, 80px);
+  background: var(--card);
+  border: 1px solid var(--rule);
+  border-radius: 28px;
+  box-shadow: 0 8px 24px rgb(30 36 24 / 0.035);
+}
+.workflow-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.18fr) minmax(0, 1fr);
+  grid-template-rows: repeat(12, minmax(0, 1fr));
+  gap: 14px 28px;
+  min-width: 0;
+  height: 500px;
+  list-style: none;
+}
+.workflow-grid > li {
+  min-width: 0;
+  min-height: 0;
+}
+.workflow-start {
+  grid-column: 1;
+  grid-row: 1 / 8;
+}
+.workflow-details {
+  grid-column: 2;
+  grid-row: 1 / -1;
+}
+.workflow-check {
+  grid-column: 1;
+  grid-row: 8 / -1;
+}
+.workflow-match {
+  grid-column: 3;
+  grid-row: 1 / 6;
+}
+.workflow-download {
+  grid-column: 3;
+  grid-row: 6 / -1;
+}
+.workflow-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-width: 0;
+  padding: 23px;
+  border: 1px solid var(--rule);
+  border-radius: 15px;
+  background: var(--paper);
+  transition:
+    border-color 160ms ease,
+    background-color 160ms ease;
+}
+.workflow-start .workflow-card,
+.workflow-download .workflow-card {
+  background: var(--card);
+}
+.workflow-card:hover {
+  background: var(--draft-faint);
+  border-color: var(--blueprint);
+}
+.workflow-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  color: var(--blueprint);
+}
+.workflow-card-top > span:last-child {
+  font-size: 14px;
+}
+.workflow-icon {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 9px;
+  background: var(--signal-soft);
+}
+.workflow-grid h3 {
+  margin-top: 17px;
+  font-size: 17px;
+  line-height: 1.3;
+  font-weight: 500;
+  letter-spacing: -0.03em;
+}
+.workflow-grid p {
+  margin-top: 10px;
+  color: var(--ink-2);
+  font-size: 12px;
+  line-height: 1.65;
+}
+.workflow-file-types,
+.workflow-export-files {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: auto;
+  padding-top: 20px;
+}
+.workflow-file-types span {
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  padding: 6px 9px;
+  font: 9px/1.2 var(--font-mono);
+  color: var(--ink-2);
+}
+.workflow-export-files {
+  gap: 9px;
+}
+.workflow-export-files span {
+  display: grid;
+  align-content: end;
+  width: 48px;
+  height: 59px;
+  padding: 8px 6px;
+  border: 1px solid var(--rule-2);
+  border-radius: 5px 12px 5px 5px;
+  background: var(--paper-2);
+  font: 9px/1.3 var(--font-mono);
+  color: var(--blueprint);
+}
+.workflow-details {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 5px 0;
+}
+.workflow-resume-stack {
+  position: relative;
+  width: min(100%, 195px);
+  aspect-ratio: 3 / 3.8;
+  margin: 12px auto 24px;
+}
+.workflow-resume-back {
+  position: absolute;
+  inset: -8px 8px 5px;
+  border-radius: 13px;
+  background: var(--blueprint);
+  transform: rotate(-7deg);
+}
+.workflow-resume-back::after {
+  content: "";
+  position: absolute;
+  inset: 5px -10px -2px 6px;
+  border: 1px solid var(--rule-2);
+  border-radius: 13px;
+  background: var(--paper-3);
+  transform: rotate(11deg);
+}
+.workflow-resume-front {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  border-radius: 12px;
+  padding: 21px;
+  background: #1b201d;
+  color: #fffef4;
+  box-shadow: 0 16px 24px rgb(0 0 0 / 0.12);
+}
+.workflow-resume-front .brand-mark {
+  color: #b9d0f0;
+  width: 20px;
+  height: 24px;
+  margin-bottom: 16px;
+}
+.workflow-sample-name {
+  font:
+    400 26px/1.15 var(--font-editorial),
+    Georgia,
+    serif;
+  letter-spacing: -0.04em;
+}
+.workflow-sample-role {
+  font-size: 8px;
+  color: #c5cbc3;
+  margin-top: 4px;
+}
+.workflow-sample-section {
+  font-size: 7px;
+  color: #c5cbc3;
+  margin-top: 13px;
+}
+.workflow-paper-lines {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-top: 9px;
+}
+.workflow-paper-lines i {
+  display: block;
+  height: 2px;
+  width: 100%;
+  background: #7a857b;
+  opacity: 0.55;
+}
+.workflow-paper-lines i:nth-child(2n) {
+  width: 75%;
+}
+.workflow-details-copy {
+  text-align: center;
+}
+.workflow-details-copy h3 {
+  font-family: var(--font-editorial), Georgia, serif;
+  font-size: 27px;
+  font-weight: 400;
+  margin-top: 0;
+}
+.workflow-details-copy p {
+  font-size: 12px;
+}
+.workflow-details-copy .btn {
+  margin-top: 20px;
+  height: 44px;
+  font-size: 11px;
+  padding-inline: 18px;
+}
+.workflow-rules {
+  max-width: 1320px;
+  margin: 20px auto 0;
+  border-bottom: 1px solid var(--draft-line);
+}
+.workflow-rules summary {
+  min-height: 48px;
+}
+@media (max-width: 1200px) and (min-width: 901px) {
+  .workflow-panel {
+    padding: 34px 24px;
+  }
+  .workflow-grid {
+    column-gap: 18px;
+    height: 520px;
+  }
+  .workflow-card {
+    padding: 19px;
+  }
+}
+@media (max-width: 900px) {
+  .workflow-heading {
+    margin-bottom: 30px;
+  }
+  .workflow-panel {
+    padding: 28px;
+  }
+  .workflow-grid {
+    height: auto;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: none;
+    grid-template-areas: "start start" "details details" "check match" "download download";
+    gap: 14px;
+  }
+  .workflow-start {
+    grid-area: start;
+  }
+  .workflow-details {
+    grid-area: details;
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    gap: 25px;
+    padding: 30px 15px;
+  }
+  .workflow-check {
+    grid-area: check;
+  }
+  .workflow-match {
+    grid-area: match;
+  }
+  .workflow-download {
+    grid-area: download;
+  }
+  .workflow-card {
+    min-height: 190px;
+  }
+  .workflow-details-copy {
+    text-align: left;
+  }
+  .workflow-details-copy .btn {
+    white-space: normal;
+  }
+  .workflow-resume-stack {
+    margin-bottom: 12px;
+  }
+  .workflow-grid .workflow-details p {
+    max-width: 26ch;
+  }
+  .workflow-file-types {
+    margin-top: 0;
+  }
+  .workflow-export-files {
+    padding-top: 16px;
+  }
+}
+@media (max-width: 600px) {
+  .workflow-panel {
+    padding: 16px;
+    border-radius: 20px;
+    margin-inline: -8px;
+  }
+  .workflow-heading {
+    text-align: left;
+  }
+  .workflow-grid {
+    gap: 12px;
+  }
+  .workflow-card {
+    padding: 17px;
+    border-radius: 12px;
+  }
+  .workflow-grid h3 {
+    font-size: 15px;
+    margin-top: 13px;
+  }
+  .workflow-grid p {
+    font-size: 13px;
+    margin-top: 9px;
+  }
+  .workflow-check .workflow-card,
+  .workflow-match .workflow-card {
+    min-height: 235px;
+    padding: 14px;
+  }
+  .workflow-check h3,
+  .workflow-match h3 {
+    font-size: 15px;
+  }
+  .workflow-details {
+    gap: 17px;
+    padding: 25px 0;
+  }
+  .workflow-details-copy h3 {
+    font-size: 24px;
+    margin-top: 0;
+  }
+  .workflow-details-copy p {
+    font-size: 13px;
+  }
+  .workflow-details-copy .btn {
+    font-size: 11px;
+    gap: 6px;
+    padding-inline: 10px;
+    margin-top: 15px;
+    width: 100%;
+  }
+  .workflow-resume-stack {
+    width: min(100%, 140px);
+    min-height: 164px;
+  }
+  .workflow-resume-front {
+    padding: 14px;
+  }
+  .workflow-resume-front .brand-mark {
+    width: 15px;
+    height: 19px;
+    margin-bottom: 6px;
+  }
+  .workflow-sample-name {
+    font-size: 21px;
+  }
+  .workflow-sample-role {
+    font-size: 6px;
+  }
+  .workflow-sample-section {
+    font-size: 6px;
+    margin-top: 6px;
+  }
+  .workflow-paper-lines {
+    gap: 3px;
+    margin-top: 5px;
+  }
+  .workflow-paper-lines i {
+    height: 1px;
+  }
+}
+@media (max-width: 359px) {
+  .workflow-grid {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: "start" "details" "check" "match" "download";
+  }
+  .workflow-resume-front .workflow-sample-section:last-of-type,
+  .workflow-resume-front .workflow-paper-lines:last-child {
+    display: none;
+  }
+  .workflow-panel {
+    padding: 12px;
+  }
+  .workflow-details {
+    gap: 12px;
+  }
+  .workflow-resume-front {
+    padding: 12px;
+  }
+  .workflow-resume-front .brand-mark {
+    margin-bottom: 6px;
+  }
+  .workflow-sample-name {
+    font-size: 18px;
+  }
+  .workflow-sample-section {
+    margin-top: 6px;
+  }
+  .workflow-check .workflow-card,
+  .workflow-match .workflow-card {
+    min-height: 0;
+    padding: 12px;
+  }
+}

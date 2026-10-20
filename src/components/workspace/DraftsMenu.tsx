@@ -39,7 +39,7 @@ export function DraftsMenu() {
         <div className="card fade-in absolute right-0 top-full z-20 mt-2 w-80 max-w-[calc(100vw-32px)] overflow-hidden p-1.5 shadow-[0_20px_50px_-20px_rgb(27_26_23/0.4)]">
           <ul className="max-h-72 overflow-y-auto scroll-thin">
             {list.map((d) => (
-              <li key={d.id} className={`group flex items-center gap-2 rounded-xl px-2 py-1.5 ${d.id === activeId ? "bg-paper-2" : "hover:bg-paper-2/60"}`}>
+              <li key={d.id} className={`group flex items-center gap-2 rounded-control px-2 py-1.5 ${d.id === activeId ? "bg-paper-2" : "hover:bg-paper-2/60"}`}>
                 <button type="button" className="min-w-0 flex-1 text-left" onClick={() => (setActive(d.id), setOpen(false))}>
                   <span className="block truncate text-sm font-medium">{d.name}</span>
                   <span className="block font-mono text-[11px] text-ink-3">{new Date(d.updatedAt).toLocaleString()}</span>

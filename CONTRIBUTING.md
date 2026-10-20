@@ -25,7 +25,7 @@ npm run check      # lint + typecheck, run before you open a PR
 ## Ground rules
 
 - **Everything single-column, text-only.** Layouts and exports must stay parser-safe. If a change adds a table, an image, a text box or a second column to an export, it needs a very good reason and an ATS-checker warning.
-- **No AI features, no API keys.** The checker is rules. Keep it that way.
+- **Local checks, no API keys.** Keep the checker transparent and rules-based.
 - **No backend.** The site must keep building with `output: "export"`. LaTeX compiles run in the browser; the remote fallback is opt-in and must keep asking first.
 - **Verify exports.** `npm run tex:bundle` compiles every LaTeX style from the sample resume in the WebAssembly engine and rebuilds the bundle. If you add a package to a style, add it to `EXTRA_PACKAGES` in `scripts/tex/build-bundle.mjs`. For HTML layouts, use Save as PDF and confirm the text extracts in order.
 - Keep PRs focused. One template, one rule, one fix.

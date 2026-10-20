@@ -18,12 +18,12 @@ export function StepTemplate({ onSelect }: { onSelect: () => void }) {
     <div className="grid gap-10">
       <section className="grid gap-4">
         <div>
-          <h3 className="font-display text-md font-bold">Layout</h3>
+          <h3 className="font-display text-md font-medium">Layout</h3>
           <p className="mt-1 text-sm text-ink-2">
             Choose a single-column layout for your preview, PDF and DOCX.
           </p>
         </div>
-        <div className="grid grid-cols-1 gap-4 min-[480px]:grid-cols-2">
+        <div className="grid grid-cols-2 gap-3 sm:gap-4">
           {HTML_TEMPLATES.map((t) => {
             const active = r.meta.template === t.id;
             return (
@@ -38,7 +38,7 @@ export function StepTemplate({ onSelect }: { onSelect: () => void }) {
                   onSelect();
                 }}
                 aria-pressed={active}
-                className={`group grid min-w-0 gap-3 rounded-card p-3 text-left transition-colors duration-200 ${
+                className={`template-choice group grid min-w-0 gap-3 rounded-card p-3 text-left transition-colors duration-200 ${
                   active ? "bg-signal-soft ring-2 ring-signal" : "bg-paper-2 hover:bg-paper-3"
                 }`}
               >
@@ -51,7 +51,7 @@ export function StepTemplate({ onSelect }: { onSelect: () => void }) {
                     <span className="chip bg-moss-soft text-moss">ATS-safe</span>
                   </div>
                   <p className="mt-0.5 text-xs text-ink-2">{t.tagline}</p>
-                  <p className="mt-1 text-xs text-ink-3">{t.bestFor}</p>
+                  <p className="mt-1 hidden text-xs text-ink-3 sm:block">{t.bestFor}</p>
                 </div>
               </button>
             );
@@ -61,7 +61,7 @@ export function StepTemplate({ onSelect }: { onSelect: () => void }) {
 
       <section className="grid gap-4">
         <div>
-          <h3 className="font-display text-md font-bold">Fine-tune</h3>
+          <h3 className="font-display text-md font-medium">Fine-tune</h3>
           <p className="mt-1 text-sm text-ink-2">Adjust fonts, spacing and colour. Changes appear in the preview.</p>
         </div>
         <div className="card p-5">
@@ -71,7 +71,7 @@ export function StepTemplate({ onSelect }: { onSelect: () => void }) {
 
       <section className="grid gap-4">
         <div>
-          <h3 className="font-display text-md font-bold">LaTeX style</h3>
+          <h3 className="font-display text-md font-medium">LaTeX style</h3>
           <p className="mt-1 text-sm text-ink-2">
             Choose a style for <span className="font-mono text-xs">.tex</span> and Overleaf. For an exact preview, compile in the studio.
           </p>
@@ -82,7 +82,7 @@ export function StepTemplate({ onSelect }: { onSelect: () => void }) {
             </p>
           )}
         </div>
-        <div className="grid grid-cols-1 gap-4 min-[480px]:grid-cols-2">
+        <div className="grid grid-cols-2 gap-3 sm:gap-4">
           {LATEX_STYLES.map((t) => {
             const active = r.meta.latexStyle === t.id;
             const hidesSummary = t.id === "columns" && sectionHasContent(shown, "summary");
@@ -101,7 +101,7 @@ export function StepTemplate({ onSelect }: { onSelect: () => void }) {
                   onSelect();
                 }}
                 aria-pressed={active}
-                className={`group grid min-w-0 gap-3 rounded-card p-3 text-left transition-colors duration-200 ${
+                className={`template-choice group grid min-w-0 gap-3 rounded-card p-3 text-left transition-colors duration-200 ${
                   active ? "bg-signal-soft ring-2 ring-signal" : "bg-paper-2 hover:bg-paper-3"
                 }`}
               >
@@ -118,7 +118,7 @@ export function StepTemplate({ onSelect }: { onSelect: () => void }) {
                     )}
                   </div>
                   <p className="mt-0.5 text-xs text-ink-2">{t.tagline}</p>
-                  <p className="mt-1 text-xs text-ink-3">{t.detail}</p>
+                  <p className="mt-1 hidden text-xs text-ink-3 sm:block">{t.detail}</p>
                   {hidesSummary && <p className="mt-1 text-xs text-amber">Summary is omitted in this style.</p>}
                 </div>
               </button>

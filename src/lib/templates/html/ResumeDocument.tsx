@@ -9,6 +9,7 @@ import {
 } from "@/lib/schema";
 import { fmtRange, fmtMonth } from "@/lib/dates";
 import { styleVars } from "./styles";
+import { KeywordText } from "@/components/workspace/KeywordText";
 
 /**
  * Pure renderer: no hooks, no browser APIs, so the exact same component runs
@@ -22,6 +23,7 @@ export function ResumeDocument({
   template,
   variant,
   decorative = false,
+  highlightKeywords = [],
 }: {
   resume: Resume;
   template?: HtmlTemplateId;
@@ -29,6 +31,7 @@ export function ResumeDocument({
   variant?: string;
   /** Thumbnails use plain elements so sample resumes don't add headings to the page outline. */
   decorative?: boolean;
+  highlightKeywords?: string[];
 }) {
   const t = variant ?? template ?? resume.meta.template;
   const paper = resume.meta.paper === "a4" ? " rs--a4" : "";
@@ -38,7 +41,7 @@ export function ResumeDocument({
       {orderedSections(resume)
         .filter((s) => sectionHasContent(resume, s))
         .map((s) => (
-          <Section key={s} id={s} resume={resume} decorative={decorative} />
+          <Section key={s} id={s} resume={resume} decorative={decorative} highlightKeywords={highlightKeywords} />
         ))}
     </article>
   );
@@ -81,7 +84,7 @@ function Header({ resume, decorative }: { resume: Resume; decorative: boolean })
   );
 }
 
-function Section({ id, resume, decorative }: { id: SectionId; resume: Resume; decorative: boolean }) {
+function Section({ id, resume, decorative, highlightKeywords }: { id: SectionId; resume: Resume; decorative: boolean; highlightKeywords: string[] }) {
   const Heading = decorative ? "div" : "h2";
   let body: ReactNode;
   switch (id) {
@@ -133,7 +136,7 @@ function Section({ id, resume, decorative }: { id: SectionId; resume: Resume; de
             .map((g) => (
               <p key={g.id}>
                 {g.category && <b>{g.category}: </b>}
-                {g.items.join(", ")}
+                <KeywordText text={g.items.join(", ")} terms={highlightKeywords} />
               </p>
             ))}
         </div>

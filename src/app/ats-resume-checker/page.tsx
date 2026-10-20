@@ -1,41 +1,88 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { CardGrid, ContentPage, FaqSection, GuideSection } from "@/components/ui/ContentPage";
-import { JsonLd, ROUTES, absoluteUrl, breadcrumb, faqSchema, pageMetadata } from "@/lib/seo";
+import {
+  CardGrid,
+  ContentPage,
+  FaqSection,
+  GuideSection,
+} from "@/components/ui/ContentPage";
+import {
+  JsonLd,
+  ROUTES,
+  absoluteUrl,
+  breadcrumb,
+  faqSchema,
+  pageMetadata,
+} from "@/lib/seo";
 import { SITE } from "@/lib/site";
-
-/* Voice matches the landing page: direct, short sentences, second person, no em dashes. */
 
 export const metadata: Metadata = pageMetadata({
   title: "Free ATS Resume Checker and Keyword Scanner",
-  description: "Free ATS resume checker with no login. Upload a PDF or DOCX to see what applicant tracking systems read, get your ATS score and match job keywords.",
+  description:
+    "Check your resume for missing details, formatting issues and job keywords. Read PDF, DOCX or TXT on your device. Free, with no account needed.",
   path: ROUTES.atsChecker,
 });
 
 const CHECKS: [string, string][] = [
-  ["Contact details", "Name, a valid email, a full phone number and a location. Portals fill their required fields from these."],
-  ["Section headings", "Work Experience, Education and Skills, named the way parsers expect to find them."],
-  ["Complete roles", "Every job needs a title, an employer and dates. Lose one and the whole entry can be misfiled."],
+  [
+    "Contact details",
+    "Your name, email, phone number and location, with checks for missing or incomplete details.",
+  ],
+  [
+    "Section headings",
+    "Familiar labels such as Work Experience, Education and Skills.",
+  ],
+  ["Complete roles", "A job title, employer and dates for each role."],
   ["Date order", "Newest role first, and no end date before its start date."],
-  ["Bullet strength", "Bullets that open with “responsible for” or “helped” get flagged, with an example from your resume."],
-  ["Numbers", "How many bullets include something you can count. Aim for half or more."],
-  ["Length", "Long bullets and resumes that probably run past one page for your level of experience."],
-  ["Special characters", "Arrows, stars and emoji that older parsers turn into junk text."],
+  [
+    "Bullet wording",
+    "Phrases such as “responsible for”, with examples you can review in context.",
+  ],
+  [
+    "Numbers",
+    "Results you can measure, such as time saved or team size. Use numbers you can support.",
+  ],
+  [
+    "Length",
+    "Long bullets and a word-count estimate. Check the preview for the actual page count.",
+  ],
+  [
+    "Special characters",
+    "Arrows, stars and emoji that may be clearer as words or plain bullets.",
+  ],
 ];
 
 const MISTAKES: [string, string][] = [
-  ["Letter-spaced headings", "Design tools often store “EXPERIENCE” as separate letters. A parser can miss the heading and the section under it."],
-  ["Contact details in the header", "Some parsers skip page headers and footers entirely. Keep your email in the body."],
-  ["Links that only say LinkedIn", "The link works in a PDF viewer, but a parser reads the word, not the address."],
-  ["Two columns and sidebars", "Text from side-by-side columns is often read across the page, mixing your skills into your job history."],
-  ["Creative section names", "“Where I’ve worked” reads well to people. Parsers look for Work Experience."],
-  ["Dates in words", "“Prior experience” or “Summer” can't be turned into a tenure. Use months and years."],
+  [
+    "Spaced-out letters",
+    "Check that headings copy as whole words, rather than separate letters.",
+  ],
+  [
+    "Contact details outside the body",
+    "Keep your email and phone in the main document so they’re easy to find.",
+  ],
+  [
+    "Links without an address",
+    "Show a readable profile address as well as making it clickable.",
+  ],
+  [
+    "Two columns and sidebars",
+    "Copy the text into a plain-text editor and check that sections stay in order.",
+  ],
+  [
+    "Unfamiliar section names",
+    "Use clear headings such as Work Experience, Education and Skills.",
+  ],
+  [
+    "Vague dates",
+    "Use months and years consistently instead of labels such as “Summer”.",
+  ],
 ];
 
 const FAQ = [
   {
     q: "How do I check if my resume is ATS-friendly?",
-    a: "Upload your resume to the free ATS resume checker. It reads the file the way a parser does, gives it an ATS score, and lists what to fix: missing contact details, dates, section headings, formatting and keywords from the job description.",
+    a: "Choose a PDF, DOCX or TXT in the builder, check the extracted text, then continue to Review & export. You’ll see suggested fixes and can compare keywords with a job posting.",
   },
   {
     q: "Is the ATS resume checker really free?",
@@ -47,19 +94,19 @@ const FAQ = [
   },
   {
     q: "Is this the same score an employer sees?",
-    a: "No. Employers configure their systems differently and don't publish their scoring. The checker finds the problems that commonly break parsing and matching, so you can fix them before you apply.",
+    a: "No. This score comes from ResumeFold’s rules. It helps you review common issues, but it doesn’t reproduce an employer’s system or predict an interview.",
   },
   {
     q: "Why does my uploaded file score lower than my draft?",
-    a: "The file score reads your original document the way a parser would. The draft score reads the fields you've edited, which export in a single-column layout. Fixing the file issues or exporting from ResumeFold closes the gap.",
+    a: "The file check uses extracted text. The draft check uses the fields you’ve edited. Imported text can lose structure, so review both reports and check the preview before downloading.",
   },
   {
     q: "Can it check a scanned resume?",
-    a: "Not yet. Scanned PDFs and images have no selectable text, which is also a problem for most applicant tracking systems. Export a text-based PDF or DOCX first.",
+    a: "ResumeFold doesn’t read text from images. Use a PDF with selectable text, a DOCX or TXT file, or paste your resume text.",
   },
   {
-    q: "Does it use AI to rewrite my resume?",
-    a: "No. The checks are transparent rules. It tells you what to fix and leaves the writing to you.",
+    q: "Does ResumeFold write my resume?",
+    a: "You write your resume. The checks suggest what to review, and you choose which changes to make.",
   },
 ];
 
@@ -82,64 +129,91 @@ export default function AtsResumeCheckerPage() {
         ]}
       />
       <ContentPage
-        eyebrow="Free. Private. No sign-up."
+        eyebrow="Resume checks"
         title="Free ATS resume checker"
-        intro="Check your resume’s ATS score for free, with no login. Upload a PDF or DOCX to see what an applicant tracking system actually reads, find missing keywords from the job description, and fix each problem in one place."
-        cta={[ROUTES.build, "Check my resume"]}
+        intro="Find missing details, review the text in your file and compare it with a job posting. The checks run on your device. No account needed."
+        cta={[ROUTES.build, "Check resume"]}
       >
         <GuideSection title="What is an ATS resume checker?">
           <p>
-            Most employers screen applications with an applicant tracking system (ATS) such as Workday, Greenhouse or Taleo. It turns your resume into plain text, sorts it into fields
-            like job title, employer and dates, and searches it for keywords from the job description.
+            An applicant tracking system (ATS) helps employers manage
+            applications. Resume parsers extract details such as job titles,
+            employers and dates from a document.
           </p>
           <p>
-            An ATS resume checker shows you that view before you apply. ResumeFold scores your resume, points out formatting that parsers misread, and compares your wording with the job posting.
-            It runs in your browser, so your resume is never uploaded to a server.
+            ResumeFold checks your extracted text or edited draft for common
+            issues. You can also compare keywords from a job posting. These are
+            local checks, separate from any employer’s system.
           </p>
         </GuideSection>
 
-        <GuideSection title="What the ATS checker looks for" intro="Rules you can read, not a mystery number.">
+        <GuideSection
+          title="What gets checked"
+          intro="Each suggestion explains what to review."
+        >
           <CardGrid items={CHECKS} />
         </GuideSection>
 
         <GuideSection title="Check your resume’s ATS score">
           <p>
-            Open the <Link className="link" href={ROUTES.build}>resume builder</Link>, go to Review, and upload a PDF, DOCX or TXT. You get two scores.
+            Open the{" "}
+            <Link className="link" href={ROUTES.build}>
+              resume builder
+            </Link>{" "}
+            and choose a PDF, DOCX or TXT. Check the extracted text, then
+            continue to Review &amp; export. Imported resumes have two reports.
           </p>
           <p>
-            <strong className="font-medium text-ink">The file score</strong> reads your original document the way a parser would. It flags missing contact details, roles without dates,
-            letter-spaced or renamed headings, and text that doesn’t fit any field.
+            <strong className="font-medium text-ink">The file score</strong>{" "}
+            uses the extracted text. It checks for missing details, unclear
+            headings and entries without dates.
           </p>
           <p>
-            <strong className="font-medium text-ink">The draft score</strong> reads the fields ResumeFold extracted. Fix them, and your PDF or DOCX export comes out single-column with
-            standard headings.
+            <strong className="font-medium text-ink">The draft score</strong>{" "}
+            uses your editable fields. Review those fields and the preview
+            before downloading your resume.
           </p>
         </GuideSection>
 
         <GuideSection title="Match resume keywords to a job description">
           <p>
-            Paste the job description and the resume keyword scanner suggests the skills and phrases it asks for. Edit that list or type your own keywords, and see your coverage as a percentage.
+            Paste a job posting to get suggested skills and phrases. Select the
+            terms that matter, or add your own. You’ll see which are present in
+            your resume.
           </p>
           <p>
-            Matching uses whole terms, so Java doesn’t count as JavaScript and SQL doesn’t count as PostgreSQL. Common abbreviations like AWS and Amazon Web Services are treated as the same thing.
-            Add only the missing terms you can back up.
+            Selecting a keyword adds it to the comparison. Use Add to Skills to
+            put it in your draft. You choose what gets added and can undo each
+            change. Include only experience you can back up.
           </p>
         </GuideSection>
 
-        <GuideSection title="Common ATS resume mistakes" intro="Things that look fine on screen and fall apart in a parser.">
+        <GuideSection
+          title="Formatting to look over"
+          intro="A few details to check before you send."
+        >
           <CardGrid items={MISTAKES} />
         </GuideSection>
 
         <GuideSection title="What an ATS score can’t tell you">
           <p>
-            No checker can see inside a particular employer’s system. Workday, Greenhouse, Lever, iCIMS and Taleo are all configured differently, and recruiters still read the result.
+            ResumeFold doesn’t connect to an employer’s hiring system. Its score
+            reflects the checks described here, not a hiring decision.
           </p>
           <p>
-            Use the score to remove parsing problems, then spend your time on the content. Clear roles, real numbers and the words from the posting matter more than a perfect 100.
+            Use the suggestions to review your resume. Check names, dates and
+            claims yourself, and read the finished document before applying.
           </p>
           <p>
-            Want a layout that avoids these problems from the start? Compare the <Link className="link" href={`${ROUTES.home}#templates`}>resume templates</Link> or the{" "}
-            <Link className="link" href={ROUTES.latexTemplates}>LaTeX resume templates</Link>.
+            For a starting layout, compare the{" "}
+            <Link className="link" href={`${ROUTES.home}#templates`}>
+              resume templates
+            </Link>{" "}
+            or the{" "}
+            <Link className="link" href={ROUTES.latexTemplates}>
+              LaTeX resume templates
+            </Link>
+            .
           </p>
         </GuideSection>
 

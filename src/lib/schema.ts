@@ -97,7 +97,7 @@ export const StyleSchema = z.object({
   accent: z.enum(["none", "blue", "green", "burgundy", "graphite"]).default("none"),
   /** Line spacing. */
   leading: z.enum(["compact", "normal", "relaxed"]).default("normal"),
-  /** Advanced: extra CSS appended to the sheet stylesheet (preview + PDF). */
+  /** Advanced: extra CSS for the live preview and browser Print option. */
   css: z.string().default(""),
 });
 
@@ -107,7 +107,14 @@ export const MetaSchema = z.object({
     company: z.string().max(160).default(""),
     jobDescription: z.string().max(30000).default(""),
     keywords: z.string().max(3000).default(""),
+    keywordsMode: z.enum(["suggested", "selected"]).default("suggested"),
+    addedSkills: z.array(z.object({ term: z.string().max(160), groupId: z.string() })).max(100).default([]),
     source: z.enum(["draft", "upload"]).default("draft"),
+  }).prefault({}),
+  exportSettings: z.object({
+    filename: z.string().max(180).default(""),
+    title: z.string().max(240).optional(),
+    author: z.string().max(160).optional(),
   }).prefault({}),
   imported: z.object({
     filename: z.string().default(""),

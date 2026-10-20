@@ -89,7 +89,7 @@ function SkillGroup({ id }: { id: string }) {
         {g.items.map((it, i) => (
           <span
             key={it + i}
-            className="fade-in inline-flex max-w-full items-center gap-1 break-words rounded-pill bg-paper-3 py-1 pl-3 pr-1.5 text-sm text-ink"
+            className="fade-in inline-flex max-w-full items-center gap-1 break-words rounded-control bg-paper-3 py-1 pl-3 pr-1.5 text-sm text-ink"
           >
             {it}
             <button

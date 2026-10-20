@@ -1,25 +1,41 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { CardGrid, ContentPage, FaqSection, GuideSection } from "@/components/ui/ContentPage";
+import {
+  CardGrid,
+  ContentPage,
+  FaqSection,
+  GuideSection,
+} from "@/components/ui/ContentPage";
 import { Thumbnail } from "@/components/workspace/Thumbnail";
 import { JsonLd, ROUTES, breadcrumb, faqSchema, pageMetadata } from "@/lib/seo";
 import { sampleResume } from "@/lib/sample";
 import { LATEX_STYLES } from "@/lib/templates";
 import { RESUME_CSS, RESUME_FONTS_URL } from "@/lib/templates/html/styles";
 
-/* Voice matches the landing page: direct, short sentences, second person, no em dashes. */
-
 export const metadata: Metadata = pageMetadata({
   title: "Free LaTeX Resume Templates for Overleaf",
-  description: "Free ATS-friendly LaTeX resume templates. Fill in a form, compile the PDF in your browser, or open the .tex in Overleaf. No LaTeX knowledge needed.",
+  description:
+    "Four free LaTeX resume templates. Add your details in the builder, edit the source and compile on your device, or open the project in Overleaf.",
   path: ROUTES.latexTemplates,
 });
 
 const WORKFLOW: [string, string][] = [
-  ["Fill in a form, not a .tex file", "Type your details once. ResumeFold writes clean LaTeX, escaping special characters like & and % for you."],
-  ["Compile in your browser", "pdfTeX runs locally through WebAssembly. Nothing is uploaded, and errors point to the line that caused them."],
-  ["Edit the source", "The LaTeX editor has autocomplete, an outline and a PDF preview. Your hand edits carry through to every LaTeX export."],
-  ["Take it to Overleaf", "One click opens the project in Overleaf. Or download a single .tex file or a .zip."],
+  [
+    "Add your details",
+    "Fill in the builder. ResumeFold turns your details into LaTeX source.",
+  ],
+  [
+    "Compile on your device",
+    "Create a PDF in your browser. The local compiler keeps your source on this device.",
+  ],
+  [
+    "Edit the source",
+    "Use the editor’s outline, autocomplete and PDF preview to adjust your resume.",
+  ],
+  [
+    "Open in Overleaf",
+    "Send the project to Overleaf when you choose, or download the .tex or .zip.",
+  ],
 ];
 
 const FAQ = [
@@ -29,7 +45,7 @@ const FAQ = [
   },
   {
     q: "Are LaTeX resumes ATS-friendly?",
-    a: "They can be. pdfLaTeX produces real, selectable text. Classic, Bold and Banking use a single column, which parsers read in order. The Two-column style uses a sidebar, so keep it for PDFs a person will read.",
+    a: "Classic, Bold and Banking use a single column with selectable text. They’re the simpler choice for job portals. Two-column uses a sidebar; check its reading order before sharing. Always follow the posting’s file requirements.",
   },
   {
     q: "Do I need to know LaTeX?",
@@ -48,7 +64,7 @@ const FAQ = [
 export default function LatexResumeTemplatesPage() {
   return (
     <>
-      <link rel="stylesheet" href={RESUME_FONTS_URL} />
+      <Link prefetch={false} rel="stylesheet" href={RESUME_FONTS_URL} />
       <style dangerouslySetInnerHTML={{ __html: RESUME_CSS }} />
       <JsonLd
         data={[
@@ -56,33 +72,59 @@ export default function LatexResumeTemplatesPage() {
           {
             "@type": "ItemList",
             name: "LaTeX resume templates",
-            itemListElement: LATEX_STYLES.map((style, index) => ({ "@type": "ListItem", position: index + 1, name: `${style.name} LaTeX resume template` })),
+            itemListElement: LATEX_STYLES.map((style, index) => ({
+              "@type": "ListItem",
+              position: index + 1,
+              name: `${style.name} LaTeX resume template`,
+            })),
           },
           faqSchema(FAQ),
         ]}
       />
       <ContentPage
-        eyebrow="Free. Open source. Overleaf ready."
+        eyebrow="LaTeX templates"
         title="Free LaTeX resume templates"
-        intro="Four original LaTeX resume templates, three of them ATS-friendly. Fill in a simple form instead of a .tex file, compile the PDF in your browser, or open the source in Overleaf."
-        cta={[ROUTES.build, "Use a LaTeX template"]}
+        intro="Four styles, with source you can edit. Add your details in the builder, compile on your device, or open the project in Overleaf."
+        cta={[ROUTES.build, "Choose a template"]}
       >
         <section className="mt-12 sm:mt-20" aria-labelledby="styles">
-          <h2 id="styles" className="font-display text-xl font-bold">Choose a LaTeX resume template</h2>
-          <p className="mt-1 max-w-[60ch] text-ink-2">Previews are approximate and use a sample resume. Compile in the editor for the exact PDF.</p>
-          <ul className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          <h2 id="styles" className="section-title">
+            Choose a LaTeX resume template
+          </h2>
+          <p className="mt-1 max-w-[60ch] text-ink-2">
+            Shown with sample details. Compile in the editor to see the final
+            PDF.
+          </p>
+          <ul className="mt-6 grid grid-cols-2 gap-x-4 gap-y-8 sm:mt-8 sm:gap-6 lg:grid-cols-4">
             {LATEX_STYLES.map((style) => (
               <li key={style.id}>
-                <Link href={ROUTES.build} className="group block">
-                  <div className="template-art relative flex justify-center overflow-hidden rounded-card bg-paper-3 px-6 pt-8">
-                    <div className="max-h-[230px] w-[220px] overflow-hidden rounded-t-[6px]" style={{ boxShadow: "var(--shadow-sheet)" }}>
-                      <Thumbnail resume={sampleResume} variant={`tex-${style.id}`} width={220} />
+                <Link
+                  prefetch={false}
+                  href={ROUTES.build}
+                  className="group block"
+                >
+                  <div className="template-art relative flex justify-center overflow-hidden rounded-card bg-paper-2 px-3 pt-5 sm:px-6 sm:pt-8">
+                    <div
+                      className="max-h-[230px] w-full max-w-[220px] overflow-hidden rounded-t-[6px]"
+                      style={{ boxShadow: "var(--shadow-sheet)" }}
+                    >
+                      <Thumbnail
+                        resume={sampleResume}
+                        variant={`tex-${style.id}`}
+                        width={220}
+                      />
                     </div>
-                    {!style.atsSafe && <span className="chip absolute right-4 top-4 bg-amber-soft text-amber">Humans only</span>}
+                    {!style.atsSafe && (
+                      <span className="chip absolute right-4 top-4 bg-amber-soft text-amber">
+                        For direct sharing
+                      </span>
+                    )}
                   </div>
                   <div className="px-1 pt-4">
-                    <h3 className="font-display font-bold">{style.name}</h3>
-                    <p className="mt-0.5 text-sm text-ink-2">{style.tagline}. {style.detail}</p>
+                    <h3 className="font-display font-medium">{style.name}</h3>
+                    <p className="mt-0.5 text-sm text-ink-2">
+                      {style.tagline}. {style.detail}
+                    </p>
                   </div>
                 </Link>
               </li>
@@ -90,26 +132,42 @@ export default function LatexResumeTemplatesPage() {
           </ul>
         </section>
 
-        <GuideSection title="How to use a LaTeX resume template" intro="The convenience of a form, the typesetting of LaTeX.">
+        <GuideSection
+          title="From details to PDF"
+          intro="Start in the builder. Adjust in the editor."
+        >
           <CardGrid items={WORKFLOW} />
         </GuideSection>
 
         <GuideSection title="Are LaTeX resumes ATS-friendly?">
           <p>
-            A LaTeX PDF is real text, so parsers can read it. Layout is what trips them up. Sidebars and side-by-side columns are often read straight across the page.
+            These templates produce selectable text. Check the reading order
+            too: text in side-by-side columns can become mixed when copied out
+            of a PDF.
           </p>
           <p>
-            Classic, Bold and Banking are single-column, with standard section names and plain bullets. Use one of those for job portals. Save Two-column for PDFs you send to a person.
+            Classic, Bold and Banking use one column, familiar headings and
+            plain bullets. Two-column has a sidebar and is intended for direct
+            sharing.
           </p>
           <p>
-            Before you apply, run the <Link className="link" href={ROUTES.atsChecker}>ATS resume checker</Link> for missing dates, weak bullets and keywords from the job posting.
+            Use the{" "}
+            <Link prefetch={false} className="link" href={ROUTES.atsChecker}>
+              ATS resume checker
+            </Link>{" "}
+            to review missing details and keywords, then read the final PDF
+            yourself.
           </p>
         </GuideSection>
 
         <GuideSection title="Edit your LaTeX resume online">
           <p>
-            Open the <Link className="link" href={ROUTES.latexStudio}>LaTeX resume editor</Link>. It looks and works like Overleaf, with a file tree, lint errors in the gutter and page-by-page preview.
-            Each style is one self-contained .tex file, so nothing is hidden in a class file.
+            The{" "}
+            <Link prefetch={false} className="link" href={ROUTES.latexStudio}>
+              LaTeX editor
+            </Link>{" "}
+            keeps your source and PDF preview together. Each style is a single
+            .tex file you can edit and download.
           </p>
         </GuideSection>
 

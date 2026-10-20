@@ -3,6 +3,8 @@
 import JSZip from "jszip";
 import type { Resume } from "@/lib/schema";
 import type { LatexOutput } from "@/lib/templates/latex";
+import { resumeFilename } from "./settings";
+export { resumeFilename } from "./settings";
 
 export function downloadBlob(blob: Blob, filename: string) {
   const url = URL.createObjectURL(blob);
@@ -19,12 +21,6 @@ export function downloadBlob(blob: Blob, filename: string) {
 
 export function downloadText(text: string, filename: string, type = "text/plain;charset=utf-8") {
   downloadBlob(new Blob([text], { type }), filename);
-}
-
-/** ATS rule B7: Firstname-Lastname-Resume.ext */
-export function resumeFilename(r: Resume, ext: string): string {
-  const base = r.contact.fullName.trim().replace(/[^\p{L}\p{N}]+/gu, "-").replace(/^-|-$/g, "") || "Resume";
-  return `${base}-Resume.${ext}`;
 }
 
 export async function downloadLatexZip(out: LatexOutput, r: Resume) {

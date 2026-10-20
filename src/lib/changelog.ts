@@ -5,85 +5,98 @@ export type ChangelogMonth = {
 
 export const CHANGELOG: ChangelogMonth[] = [
   {
+    month: "2026-10",
+    entries: [
+      {
+        version: "0.5.0",
+        date: "2026-10-20",
+        changes: [
+          "Redesigned the site, resume builder and LaTeX studio with clearer layouts and navigation.",
+          "Improved mobile, tablet and laptop layouts, with lighter previews and motion that adapts to device resources and accessibility settings.",
+          "Added direct PDF downloads and editable document details, with file names based on your name, target role and company.",
+          "Improved job keyword suggestions. Choose terms, add skills to your draft and undo changes.",
+        ],
+      },
+    ],
+  },
+  {
     month: "2026-09",
     entries: [
       {
         version: "0.3.4",
         date: "2026-09-17",
         changes: [
-          "Added a separate ATS score for uploaded files, based on what a parser can read from the original.",
-          "Improved imports of design-tool resumes, including letter-spaced headings, detached bullets and entries without dates.",
-          "Added ATS resume checker and LaTeX resume template pages, and simplified the home page.",
-          "Added smooth FAQ animations and gentler scrolling from the navigation.",
+          "Added a separate score for the text extracted from an uploaded resume.",
+          "Improved imports of resumes with spaced-out headings, detached bullets or missing dates.",
+          "Added guides to resume checks and LaTeX templates.",
+          "Smoothed section scrolling and FAQ animations.",
         ],
       },
       {
         version: "0.3.3",
         date: "2026-09-14",
         changes: [
-          "Fixed PDF uploads failing in Safari.",
-          "Simplified mobile uploads into choose, progress and review steps, with retry and change-file controls.",
+          "Fixed a Safari PDF import issue.",
+          "Simplified mobile imports, with reading progress and options to retry or choose another file.",
         ],
       },
       {
         version: "0.3.2",
         date: "2026-09-14",
         changes: [
-          "Fixed PDF reading in browsers without newer JavaScript features.",
-          "Added resume text paste with the same review, keyword matching and export flow.",
-          "Added clearer guidance and optional error details when a file can't be read.",
+          "Improved PDF reading in older browsers.",
+          "Added the option to paste resume text for review, keyword matching and downloads.",
+          "Added clearer import errors and troubleshooting details.",
         ],
       },
       {
         version: "0.3.1",
         date: "2026-09-14",
         changes: [
-          "Fixed mobile PDF uploads.",
-          "Kept the editor usable when browser storage is blocked or full, with a visible backup reminder.",
-          "Improved tablet touch controls, landscape layouts, downloads and PDF preview memory use.",
+          "Fixed a mobile PDF import issue.",
+          "Added a backup reminder when browser storage is blocked or full.",
+          "Improved tablet controls, landscape layouts and downloads. Reduced PDF preview memory use.",
         ],
       },
       {
         version: "0.3.0",
         date: "2026-09-14",
         changes: [
-          "Added local PDF, DOCX and TXT resume uploads with editable extracted text and import notes.",
-          "Saved job targets, postings and keywords with each draft, including JSON backups.",
-          "Improved job matching for phrases, common abbreviations and whole terms.",
-          "Added a playful session nickname that never appears in exported resumes.",
+          "Added PDF, DOCX and TXT imports, processed on your device with extracted text you can review.",
+          "Saved job postings and keywords with each draft and its backup.",
+          "Improved keyword matching for phrases and common abbreviations.",
+          "Added session nicknames for the editor, excluded from downloaded resumes.",
         ],
       },
       {
         version: "0.2.2",
         date: "2026-09-13",
         changes: [
-          "Set the GitHub Pages site as the default public URL for links and previews.",
+          "Updated public links and previews to use the GitHub Pages address.",
         ],
       },
       {
         version: "0.2.1",
         date: "2026-09-13",
-        changes: [
-          "Fixed GitHub Pages deployment and public URLs under a repository path.",
-        ],
+        changes: ["Fixed deployment and links on GitHub Pages."],
       },
       {
         version: "0.2.0",
         date: "2026-09-13",
         changes: [
-          "Renamed the site and project to ResumeFold.",
-          "Added this changelog and bundled all fonts locally for consistent typography.",
-          "Simplified mobile navigation and introduced black primary buttons and bold headings.",
-          "Made LaTeX compilation manual by default on mobile and low-power devices.",
+          "Renamed the project to ResumeFold.",
+          "Added the changelog and bundled fonts for consistent type across devices.",
+          "Updated mobile navigation, buttons and headings.",
+          "Made LaTeX compilation manual on mobile and low-power devices.",
         ],
       },
       {
         version: "0.1.0",
         date: "2026-09-13",
         changes: [
-          "Built the resume wizard, live preview, four single-column layouts and rules-based ATS checker.",
-          "Added PDF, DOCX, LaTeX and Overleaf exports, with a browser-based LaTeX editor and compiler.",
-          "Added saved drafts, JSON backups and light, dark and system themes.",
+          "Launched the resume builder with a live preview, four layouts and resume checks.",
+          "Added PDF, DOCX and LaTeX downloads, Overleaf support and an in-browser LaTeX studio.",
+          "Added saved drafts, backups and appearance settings.",
         ],
       },
     ],

@@ -1,13 +1,16 @@
 import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import "./editorial.css";
+import "./workflow.css";
 import { THEME_BOOT_SCRIPT } from "@/lib/theme";
 import { SITE } from "@/lib/site";
 import { OG_IMAGE } from "@/lib/seo";
+import { ScrollEffects } from "@/components/ui/ScrollEffects";
 
-const googleSans = localFont({
-  src: "./fonts/google-sans-latin.woff2",
-  variable: "--font-google-sans",
+const editorialFont = localFont({
+  src: "../../public/fonts/source-serif-regular.woff2",
+  variable: "--font-editorial",
   weight: "400 700",
   display: "swap",
 });
@@ -16,6 +19,7 @@ const googleSansCode = localFont({
   variable: "--font-google-sans-code",
   weight: "300 800",
   display: "swap",
+  preload: false,
 });
 const headingFont = localFont({
   src: "./fonts/inter-variable.woff2",
@@ -39,7 +43,13 @@ export const metadata: Metadata = {
   category: "productivity",
   formatDetection: { telephone: false, email: false, address: false },
   // Set NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION at build time to verify the site in Google Search Console.
-  ...(process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION ? { verification: { google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION } } : {}),
+  ...(process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION
+    ? {
+        verification: {
+          google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
+        },
+      }
+    : {}),
   // Google ignores meta keywords; other engines may still read them. The page copy is what ranks.
   keywords: [
     "free resume builder",
@@ -58,30 +68,73 @@ export const metadata: Metadata = {
   ],
   applicationName: SITE.name,
   // Pages set their own canonical URL and social tags through pageMetadata().
-  openGraph: { type: "website", siteName: SITE.name, locale: "en_US", title: SITE.title, description, images: [OG_IMAGE] },
-  twitter: { card: "summary_large_image", title: SITE.title, description, images: [OG_IMAGE] },
+  openGraph: {
+    type: "website",
+    siteName: SITE.name,
+    locale: "en_US",
+    title: SITE.title,
+    description,
+    images: [OG_IMAGE],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: SITE.title,
+    description,
+    images: [OG_IMAGE],
+  },
   // Setting icons here replaces the icon.svg file convention, so both are listed. Icon URLs are not resolved against metadataBase.
   icons: {
-    icon: [{ url: `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/icon.svg`, type: "image/svg+xml", sizes: "any" }],
-    apple: [{ url: `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/apple-touch-icon.png`, sizes: "180x180", type: "image/png" }],
+    icon: [
+      {
+        url: `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/icon.svg`,
+        type: "image/svg+xml",
+        sizes: "any",
+      },
+    ],
+    apple: [
+      {
+        url: `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/apple-touch-icon.png`,
+        sizes: "180x180",
+        type: "image/png",
+      },
+    ],
   },
-  robots: { index: true, follow: true, googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1 } },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
 };
 
 export const viewport: Viewport = {
   viewportFit: "cover",
   interactiveWidget: "resizes-content",
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
-    { media: "(prefers-color-scheme: dark)", color: "#202124" },
+    { media: "(prefers-color-scheme: light)", color: "#faf7ee" },
+    { media: "(prefers-color-scheme: dark)", color: "#151d26" },
   ],
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
-    <html lang="en" data-scroll-behavior="smooth" className={`${googleSans.variable} ${googleSansCode.variable} ${headingFont.variable}`} suppressHydrationWarning>
+    <html
+      lang="en"
+      data-scroll-behavior="smooth"
+      className={`${editorialFont.variable} ${googleSansCode.variable} ${headingFont.variable}`}
+      suppressHydrationWarning
+    >
       <body>
         <script dangerouslySetInnerHTML={{ __html: THEME_BOOT_SCRIPT }} />
+        <ScrollEffects />
         {children}
       </body>
     </html>

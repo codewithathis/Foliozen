@@ -36,7 +36,7 @@ test("suggests only posting terms and respects explicit keywords and source", ()
 test("old resumes get defaults and analysis survives JSON backup", () => {
   const old = parseResume({ contact: { fullName: "Alex Morgan" }, meta: { template: "standard" } });
   assert.equal(old.meta.analysis.jobDescription, "");
-  old.meta.analysis = { jobTitle: "Data analyst", company: "Example", jobDescription: "SQL and financial reporting", keywords: "SQL, financial reporting", source: "draft" };
+  old.meta.analysis = { ...old.meta.analysis, jobTitle: "Data analyst", company: "Example", jobDescription: "SQL and financial reporting", keywords: "SQL, financial reporting", source: "draft" };
   assert.deepEqual(parseResume(JSON.parse(JSON.stringify(old))).meta.analysis, old.meta.analysis);
 });
 

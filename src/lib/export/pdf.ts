@@ -2,6 +2,7 @@
 
 import type { Resume } from "@/lib/schema";
 import { wrapPrintHtml } from "./html";
+import { exportDetails } from "./settings";
 
 /** The live preview's sheet, minus the editor-only spotlight class. */
 export function currentSheetHtml(): string | null {
@@ -9,6 +10,7 @@ export function currentSheetHtml(): string | null {
   if (!el) return null;
   const clone = el.cloneNode(true) as HTMLElement;
   clone.querySelectorAll(".rs-hi").forEach((n) => n.classList.remove("rs-hi"));
+  clone.querySelectorAll("mark.keyword-highlight").forEach((node) => node.replaceWith(document.createTextNode(node.textContent ?? "")));
   return clone.outerHTML;
 }
 
@@ -20,7 +22,8 @@ export function currentSheetHtml(): string | null {
 export async function printSheet(r: Resume): Promise<{ ok: boolean; reason?: string }> {
   const html = currentSheetHtml();
   if (!html) return { ok: false, reason: "Preview not rendered" };
-  const doc = wrapPrintHtml(html, r.meta.paper, `${r.contact.fullName || "Resume"}, Resume`, r.meta.style.css);
+  const filename = exportDetails(r).filename;
+  const doc = wrapPrintHtml(html, r.meta.paper, filename, r.meta.style.css);
 
   const frame = document.createElement("iframe");
   frame.setAttribute("aria-hidden", "true");
@@ -37,7 +40,7 @@ export async function printSheet(r: Resume): Promise<{ ok: boolean; reason?: str
   win.document.close();
 
   // Title becomes the default filename in most browsers' Save-as-PDF dialog.
-  win.document.title = filenameBase(r);
+  win.document.title = filename;
   try {
     await Promise.all(Array.from(win.document.querySelectorAll<HTMLLinkElement>('link[rel="stylesheet"]'), (link) => {
       if (link.sheet) return Promise.resolve();
@@ -61,16 +64,21 @@ export async function printSheet(r: Resume): Promise<{ ok: boolean; reason?: str
   await win.document.fonts?.ready;
   await new Promise((res) => setTimeout(res, 150));
 
-  const cleanup = () => setTimeout(() => frame.remove(), 1000);
+  const previousTitle = document.title;
+  document.title = filename;
+  const cleanup = () => {
+    if (document.title === filename) document.title = previousTitle;
+    setTimeout(() => frame.remove(), 1000);
+  };
   win.addEventListener("afterprint", cleanup, { once: true });
-  win.focus();
-  win.print();
+  try {
+    win.focus();
+    win.print();
+  } catch {
+    cleanup();
+    return { ok: false, reason: "This browser could not open the print dialog." };
+  }
   // Safari never fires afterprint reliably; remove later regardless.
-  setTimeout(() => frame.isConnected && frame.remove(), 60_000);
+  setTimeout(cleanup, 60_000);
   return { ok: true };
-}
-
-function filenameBase(r: Resume) {
-  const base = r.contact.fullName.trim().replace(/[^\p{L}\p{N}]+/gu, "-").replace(/^-|-$/g, "") || "Resume";
-  return `${base}-Resume`;
 }

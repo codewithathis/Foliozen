@@ -25,7 +25,7 @@ export function StepExtras() {
   return (
     <div className="grid gap-8">
       <section className="grid gap-3">
-        <h3 className="font-display text-md font-bold">Certifications</h3>
+        <h3 className="font-display text-md font-medium">Certifications</h3>
         {r.certifications.map((c) => {
           const spot = `certifications.${c.id}`;
           const set = <K extends keyof typeof c>(k: K, v: (typeof c)[K]) =>
@@ -66,7 +66,7 @@ export function StepExtras() {
 
       <section className="grid gap-3">
         <div>
-          <h3 className="font-display text-md font-bold">Section order</h3>
+          <h3 className="font-display text-md font-medium">Section order</h3>
           <p className="mt-1 text-sm text-ink-2">
             Your layout set a sensible default. Empty sections are skipped automatically.
           </p>
@@ -94,7 +94,7 @@ export function StepExtras() {
       </section>
 
       <section className="grid gap-3">
-        <h3 className="font-display text-md font-bold">Paper size</h3>
+        <h3 className="font-display text-md font-medium">Paper size</h3>
         <div className="flex gap-2">
           {(["letter", "a4"] as const).map((p) => (
             <button

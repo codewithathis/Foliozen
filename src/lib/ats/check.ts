@@ -1,3 +1,4 @@
+import { containsKeyword, normaliseKeyword, parseKeywordList, suggestKeywords } from "./keywords";
 import { sectionHasContent, type Resume } from "@/lib/schema";
 
 /**
@@ -265,86 +266,29 @@ function yearsOfExperience(r: Resume): number {
 // Keyword match against a pasted job description (B8). Pure heuristics.
 // ---------------------------------------------------------------------------
 
-const STOP = new Set(
-  `a an and are as at be by for from has have in is it its of on or that the to was were will with you your we our this these those they their them he she his her not but if then than so such can may must should would could also more most other some any all each into over under about after before between through during without within across per via etc using use used
-  experience team work working ability strong excellent good great years year skills skill knowledge role responsibilities responsible requirements required preferred plus bonus including include includes candidate candidates position job company benefits equal opportunity employer develop developing development build building design designing designs support supporting help ensure ensuring provide providing manage managing management deliver delivering solutions solution business customer customers product products projects project new well time day days ways way high level levels degree bachelor bachelors master masters related field fields communication written verbal environment fast paced paced`
-    .split(/\s+/)
-    .filter(Boolean),
-);
-
-/** Tokens that look like tech / domain terms: keep case, dots, plus, hash (C++, C#, Node.js, CI/CD). */
-function tokenize(text: string): string[] {
-  return text
-    .replace(/[‘’]/g, "'")
-    .split(/[\s,;:()\[\]{}"“”|]+/)
-    .map((t) => t.replace(/^[.!?/-]+|[.!?/-]+$/g, ""))
-    .filter((t) => t.length >= 2 && !/^\d+$/.test(t));
-}
+export { containsKeyword, suggestKeywords } from "./keywords";
 
 export type KeywordReport = {
   matched: string[];
   missing: string[];
-  coverage: number; // 0..1
+  coverage: number;
 };
-
-const PHRASES = ["project management", "product management", "customer service", "customer success", "data analysis", "data analytics", "machine learning", "deep learning", "natural language processing", "continuous integration", "continuous delivery", "version control", "financial modeling", "financial modelling", "financial reporting", "risk management", "stakeholder management", "supply chain", "quality assurance", "quality control", "patient care", "clinical research", "digital marketing", "search engine optimization", "content strategy", "business analysis", "business intelligence", "user research", "interaction design", "problem solving", "public speaking", "account management", "sales operations", "human resources", "talent acquisition"];
-const ALIASES: Record<string, string[]> = {
-  "node.js": ["nodejs", "node js"], "react.js": ["reactjs", "react"], "postgresql": ["postgres"],
-  "javascript": ["js"], "typescript": ["ts"], "amazon web services": ["aws"], "aws": ["amazon web services"],
-  "search engine optimization": ["seo"], "seo": ["search engine optimization"],
-  "continuous integration": ["ci/cd"], "continuous delivery": ["ci/cd"],
-  "microsoft excel": ["excel"], "financial modeling": ["financial modelling"],
-};
-const NAMED_SKILLS = new Set("python javascript typescript java react node.js nodejs sql postgresql postgres mysql sqlite excel aws azure docker kubernetes git html css figma tableau powerbi salesforce jira sap r matlab tensorflow pytorch c++ c# go rust ruby php swift kotlin linux pandas numpy accounting bookkeeping nursing logistics negotiation auditing".split(" "));
-
-function normaliseTerm(text: string) { return text.normalize("NFKC").toLowerCase().replace(/[–—-]/g, " ").replace(/\s+/g, " ").trim(); }
-export function containsKeyword(text: string, term: string): boolean {
-  return matchesNormalised(normaliseTerm(text), term);
-}
-function matchesNormalised(corpus: string, term: string): boolean {
-  const key = normaliseTerm(term);
-  if (!key) return false;
-  return [key, ...(ALIASES[key] ?? [])].some((alias) => {
-    const re = new RegExp(`(^|[^\\p{L}\\p{N}])${escapeRe(alias)}(?:s|es)?(?=$|[^\\p{L}\\p{N}+#])`, "u");
-    return re.test(corpus);
-  });
-}
-
-export function suggestKeywords(jobDescription: string): string[] {
-  const counts = new Map<string, { n: number; display: string }>();
-  const corpus = normaliseTerm(jobDescription);
-  const phrases = PHRASES.filter((phrase) => matchesNormalised(corpus, phrase));
-  for (const raw of tokenize(jobDescription)) {
-    const key = raw.toLowerCase();
-    if (STOP.has(key) || phrases.some((phrase) => phrase.split(" ").includes(key))) continue;
-    const cur = counts.get(key);
-    const display = cur && /[A-Z]/.test(cur.display) ? cur.display : raw;
-    counts.set(key, { n: (cur?.n ?? 0) + 1, display });
-  }
-  const terms = [...counts.values()].map((v) => ({ ...v, score: v.n + (NAMED_SKILLS.has(v.display.toLowerCase()) || /[A-Z].*[A-Z]|[.+#]/.test(v.display) ? 2 : 0) }))
-    .filter((v) => v.score >= 2).sort((a, b) => b.score - a.score).map((v) => v.display);
-  return [...phrases, ...terms].slice(0, 30);
-}
 
 export function keywordMatch(jobDescription: string, r: Resume, explicitKeywords = "", uploadedText?: string): KeywordReport | null {
   const jd = jobDescription.trim();
-  const explicit = explicitKeywords.split(/[,;\n]+/).map((term) => term.trim()).filter(Boolean);
+  const explicit = parseKeywordList(explicitKeywords);
   if (!explicit.length && jd.length < 40) return null;
 
-  const ranked = [...new Map((explicit.length ? explicit : suggestKeywords(jd)).map((term) => [normaliseTerm(term), term])).values()].slice(0, 100);
+  const ranked = [...new Map((explicit.length ? explicit : suggestKeywords(jd)).map((term) => [normaliseKeyword(term), term])).values()].slice(0, 100);
   if (!ranked.length) return null;
-  const resumeText = normaliseTerm(uploadedText ?? resumeToText(r));
+  const resumeText = uploadedText ?? resumeToText(r);
   const matched: string[] = [];
   const missing: string[] = [];
   for (const term of ranked) {
-    (matchesNormalised(resumeText, term) ? matched : missing).push(term);
+    (containsKeyword(resumeText, term) ? matched : missing).push(term);
   }
   const total = matched.length + missing.length;
   return { matched, missing, coverage: total ? matched.length / total : 0 };
-}
-
-function escapeRe(s: string) {
-  return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
 export function resumeToText(r: Resume): string {

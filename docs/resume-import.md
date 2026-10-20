@@ -2,7 +2,7 @@
 
 ## Product choices
 
-ResumeFold reads PDF, DOCX and UTF-8 TXT locally. PDF.js and JSZip are loaded on demand; no new service, API key, AI model or parsing dependency is needed. The user reviews extracted text before creating a new draft. Existing drafts remain available.
+ResumeFold reads PDF, DOCX and UTF-8 TXT locally. PDF.js and JSZip load on demand, with no external parsing service or API key. The user reviews extracted text before creating a new draft. Existing drafts remain available.
 
 PDF loading uses PDF.js's official legacy build and its matching worker. Both include compatibility support for JavaScript APIs missing from some mobile Safari versions. The worker has a separate filename so an older cached modern worker is not reused. File cancellation checks the signal directly without requiring `AbortSignal.throwIfAborted`.
 
@@ -14,7 +14,9 @@ The comparison can use the edited draft or the original extracted text. Uploads 
 
 ## Job-specific keywords
 
-Paste the actual posting and optionally name the target role and company. Suggested keywords come from that posting: known skills, common domain phrases and recurring terms. Users can replace suggestions with their own comma-separated terms, including nontechnical vocabulary. Whole-term matching prevents Java from matching JavaScript, SQL from matching PostgreSQL and C from matching C++. Common abbreviations such as AWS and Amazon Web Services are accepted.
+Paste the actual posting and optionally name the target role and company. Suggestions match a curated catalog of recognizable tools, skills and domain practices appearing in the posting. Repeated unknown words are never promoted automatically. This intentionally misses uncommon or emerging skills: users can add any relevant term or phrase manually, including nontechnical vocabulary. Whole-term matching prevents Java from matching JavaScript, SQL from matching PostgreSQL and C from matching C++. Common abbreviations such as AWS and Amazon Web Services are accepted.
+
+Suggestion buttons select or deselect terms for comparison. Clearing all selections stays empty across navigation and reloads; Use suggestions restores automatic selection. Add keyword only changes the comparison list. Add to Skills explicitly inserts a missing term into an Additional skills group, switches comparison to the edited draft and offers undo. Existing skills are not removed by undo. Added terms are highlighted in the live preview and in an optional text inspection view, with no highlights in PDF, DOCX or LaTeX. Original uploaded text is never rewritten.
 
 Coverage measures presence across the selected terms, equally weighted. It does not measure proficiency, years of experience, eligibility or interview likelihood. Different employers configure their systems differently. Missing terms should only be added where the candidate has relevant evidence. There is no automatic job-board scraping: pasting a posting keeps the static app independent of CORS restrictions, account access and external services.
 

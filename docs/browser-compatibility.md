@@ -24,13 +24,19 @@ Current Chrome on Android and Windows/macOS, current Safari on iPhone/iPad/macOS
 - Choosing a template advances directly to Basics on phones and coarse-pointer devices, including landscape touch layouts.
 - Landscape safe-area insets protect controls from notches. Text size adjustment is stable across rotation; page zoom remains enabled.
 - Downloads keep their object URL alive for 30 seconds. Browsers that display a file instead of downloading it open a separate tab, preserving the editor.
+- Direct PDFs are built locally with static embedded Source font faces and no browser print APIs. The PDF module and font files load only on export. Unsupported font characters report an actionable Print fallback rather than silently losing text; browser Print also preserves custom CSS. Native print metadata is controlled by the browser, so use direct download for editable document properties.
 - Section scrolling, preview navigation and animations respect reduced-motion preferences.
+- Scroll reveals run once through a shared observer. They are skipped when motion is reduced, memory or CPU resources are limited, or data saving is enabled. Content is visible by default, including when scripts or animation APIs are unavailable. The fixed header does not use background blur.
+- Below 1280 px, the builder uses a horizontal step list and opens the preview on demand. Hidden previews are unmounted; desktop preview updates are deferred while typing. Template previews skip offscreen painting, and heavy routes are not prefetched.
+- Coarse-pointer devices, including large iPads, default to manual LaTeX compilation. Reported resource limits and data-saving connections do the same on laptops and desktops. Limited-resource PDF previews cap canvas density at 1× to reduce memory use.
 
 ## Verification
 
 Automated tests cover import validation, bounded DOCX decompression, actual PDF upload extraction without native iterator helpers, promise resolvers, buffer transfers, URL parsing or stream async iteration, plus bootstrap execution in an isolated worker. The stream test first reproduces the failure with the library's old method, then extracts the same file through explicit readers. Tests also cover chunk boundaries, early text limits, cancelling pending reads, native file reads, provider errors, keyword matching, metadata persistence/export separation, blocked/full/corrupt storage and editor hydration with storage access denied.
 
 Local Chromium checks cover phone/tablet/desktop layouts, portrait/landscape sizes, file imports, template selection, section tracking and studio rendering. These checks simulate viewport sizes and missing JavaScript features; they do not substitute for physical iPhone/Android devices or Safari/Firefox engine testing. The current session has no connected Safari, macOS or Android test browser.
+
+The October 2026 final pass checked 18 viewports from 320 × 568 to 2560 × 1440, including iPad portrait/landscape and common MacBook and Windows laptop sizes. Phone and basic Windows profiles also ran with 6× CPU throttling. Checks covered navigation targets and section tracking, editable fields, preview mounting and bento overflow. Scroll reveals were verified with normal/reduced motion, limited resources, a missing observer API and scripts disabled. The production export was checked under `/resumefold/`, including route changes, deferred tool loading and a constrained-connection phone profile. All 32 import, analysis, export and static-routing regression tests passed.
 
 ## Sources
 

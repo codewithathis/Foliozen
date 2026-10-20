@@ -5,8 +5,8 @@ import { useEffect, useLayoutEffect, useRef, useState } from "react";
 export type NavItem = { href: string; label: string };
 
 /**
- * A pill-shaped nav: one rounded container, links as pills, and a highlight
- * that slides to the active item. "Active" follows the section in view when
+ * A compact nav: links share a moving highlight
+ * that follows the active item. "Active" follows the section in view when
  * the hrefs are in-page anchors (#templates), and the hover/focus otherwise.
  */
 export function NavPill({ items, activeHref = null, className = "", bare = false }: { items: NavItem[]; activeHref?: string | null; className?: string; bare?: boolean }) {
@@ -46,12 +46,12 @@ export function NavPill({ items, activeHref = null, className = "", bare = false
       ref={container}
       aria-label="Primary"
       onMouseLeave={() => setHover(null)}
-      className={`relative inline-flex max-w-full items-center gap-0.5 overflow-x-auto rounded-pill p-1 ${bare ? "" : "bg-paper-2 ring-1 ring-rule/60"} ${className}`}
+      className={`relative inline-flex max-w-full items-center gap-0.5 overflow-x-auto rounded-control p-1 ${bare ? "" : "bg-paper-2 ring-1 ring-rule/60"} ${className}`}
       style={{ scrollbarWidth: "none" }}
     >
       <span
         aria-hidden
-        className={`pointer-events-none absolute left-0 top-1 bottom-1 rounded-pill transition-[transform,width,opacity] duration-300 ${bare ? "bg-paper-3" : "bg-paper shadow-[var(--shadow-pop)]"}`}
+        className={`pointer-events-none absolute left-0 top-1 bottom-1 rounded-control transition-[transform,width,opacity] duration-300 ${bare ? "bg-paper-3" : "bg-paper shadow-[var(--shadow-pop)]"}`}
         style={{
           transform: `translate3d(${pill?.left ?? 0}px, 0, 0)`,
           width: pill?.width ?? 0,
@@ -73,7 +73,7 @@ export function NavPill({ items, activeHref = null, className = "", bare = false
             onFocus={(event) => { if (event.currentTarget.matches(":focus-visible")) setHover(it.href); }}
             onBlur={() => setHover(null)}
             aria-current={activeHref === it.href ? "location" : undefined}
-            className={`relative z-10 flex min-h-11 shrink-0 items-center whitespace-nowrap rounded-pill px-4 py-2 text-sm font-medium transition-colors lg:min-h-0 ${
+            className={`relative z-10 flex min-h-11 shrink-0 items-center whitespace-nowrap rounded-control px-4 py-2 text-sm font-medium transition-colors lg:min-h-0 ${
               on ? "text-ink" : "text-ink-2 hover:text-ink"
             }`}
           >

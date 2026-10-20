@@ -1,6 +1,6 @@
 {
   "name": "resumefold",
-  "version": "0.3.4",
+  "version": "0.5.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -10,8 +10,9 @@
     "check:latex": "npm run tex:bundle",
     "predev": "node scripts/copy-pdf-worker.mjs",
     "prebuild": "node scripts/copy-pdf-worker.mjs",
+    "postbuild": "node scripts/normalize-static-segments.mjs",
     "check": "npm run lint && tsc --noEmit",
-    "test": "tsx --test tests/import.test.ts tests/analysis.test.ts",
+    "test": "tsx --test tests/import.test.ts tests/analysis.test.ts tests/static-export.test.ts tests/export-keywords.test.ts",
     "preview": "npx serve out -l 3001",
     "tex:bundle": "node --max-old-space-size=6144 scripts/tex/build-bundle.mjs"
   },
@@ -25,11 +26,13 @@
     "@codemirror/state": "^6.7.4",
     "@codemirror/view": "^6.43.11",
     "@lezer/highlight": "^1.2.3",
+    "@pdf-lib/fontkit": "^1.1.1",
     "docx": "^9.7.1",
     "immer": "^11.1.18",
     "jszip": "^3.10.2",
     "nanoid": "^6.0.1",
     "next": "16.3.5",
+    "pdf-lib": "^1.17.1",
     "pdfjs-dist": "^6.3.289",
     "react": "19.2.8",
     "react-dom": "19.2.8",
