@@ -19,8 +19,7 @@ export function SiteFooter() {
                 href="/"
                 aria-label={`${SITE.name} home`}
               >
-                <BrandMark />
-                {SITE.name}
+                <BrandMark lockup />
               </Link>
               <p>
                 A place to put your experience in order.

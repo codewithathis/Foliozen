@@ -8,6 +8,14 @@ export const CHANGELOG: ChangelogMonth[] = [
     month: "2026-10",
     entries: [
       {
+        version: "0.5.1",
+        date: "2026-10-24",
+        changes: [
+          "Introduced the new ResumeFold logo and wordmark, designed in Figma, across the site and resume builder.",
+          "Added matching light and dark logos, updated browser and home screen icons and social previews, and adjusted logo spacing for small mobile screens.",
+        ],
+      },
+      {
         version: "0.5.0",
         date: "2026-10-20",
         changes: [

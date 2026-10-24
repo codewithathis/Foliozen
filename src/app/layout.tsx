@@ -82,13 +82,24 @@ export const metadata: Metadata = {
     description,
     images: [OG_IMAGE],
   },
-  // Setting icons here replaces the icon.svg file convention, so both are listed. Icon URLs are not resolved against metadataBase.
+  // Public icon URLs include the deployment base path for static hosting.
   icons: {
     icon: [
+      {
+        url: `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/favicon.ico`,
+        type: "image/x-icon",
+      },
       {
         url: `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/icon.svg`,
         type: "image/svg+xml",
         sizes: "any",
+        media: "(prefers-color-scheme: light)",
+      },
+      {
+        url: `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/brand/resumefold-icon-small-dark.svg`,
+        type: "image/svg+xml",
+        sizes: "any",
+        media: "(prefers-color-scheme: dark)",
       },
     ],
     apple: [

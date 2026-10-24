@@ -207,9 +207,8 @@ function Header() {
 
   return (
     <header className="flex shrink-0 flex-wrap items-center gap-2 border-b border-rule/60 px-4 pb-2 pt-[max(8px,env(safe-area-inset-top))] sm:h-16 sm:flex-nowrap sm:gap-4 sm:px-6 sm:py-0">
-      <Link href="/" prefetch={false} className="brand-link shrink-0">
-        <BrandMark />
-        ResumeFold
+      <Link href="/" prefetch={false} className="brand-link shrink-0" aria-label="ResumeFold home">
+        <BrandMark lockup />
       </Link>
       <span className="hidden h-5 w-px bg-rule sm:block" aria-hidden />
       <div className="order-last flex w-full min-w-0 items-center gap-2 sm:order-none sm:w-auto sm:flex-1">

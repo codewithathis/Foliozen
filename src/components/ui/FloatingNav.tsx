@@ -113,8 +113,7 @@ export function FloatingNav({
           className="brand-link shrink-0 px-2 lg:px-0"
           aria-label={`${brand} home`}
         >
-          <BrandMark />
-          {brand}
+          <BrandMark lockup />
         </Link>
 
         <div className="hidden lg:mx-auto lg:block">

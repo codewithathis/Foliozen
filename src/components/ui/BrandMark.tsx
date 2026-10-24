@@ -1,20 +1,26 @@
-export function BrandMark() {
+import Image from "next/image";
+
+const base = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+
+export function BrandMark({ lockup = false }: { lockup?: boolean }) {
+  const asset = lockup ? "lockup" : "icon-small";
   return (
-    <svg
-      className="brand-mark"
+    <span
+      className={lockup ? "brand-logo" : "brand-mark"}
       aria-hidden="true"
-      width="23"
-      height="27"
-      viewBox="0 0 23 27"
-      fill="none"
     >
-      <path d="M3 1h11l7 7v17H3V1Z" stroke="currentColor" strokeWidth="1.4" />
-      <path
-        d="M14 1v7h7M7 13h10M7 17h10M7 21h6"
-        stroke="currentColor"
-        strokeWidth="1.2"
-      />
-      <path d="m1 8 2-2v19h12l-2 1H1V8Z" fill="currentColor" opacity=".22" />
-    </svg>
+      {(["light", "dark"] as const).map((theme) => (
+        <Image
+          key={theme}
+          className={`brand-asset brand-asset-${theme}`}
+          src={`${base}/brand/resumefold-${asset}-${theme}.svg`}
+          alt=""
+          width={lockup ? 999 : 1024}
+          height={lockup ? 256 : 1024}
+          loading="eager"
+          unoptimized
+        />
+      ))}
+    </span>
   );
 }
