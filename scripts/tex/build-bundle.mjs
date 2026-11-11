@@ -3,7 +3,7 @@
  *
  * 1. Download BusyTeX (pdfTeX compiled to WebAssembly, MIT) and its
  *    "texlive-basic" tree, plus the handful of CTAN packages our styles use.
- * 2. Run pdflatex *in Node* on the four sample resumes with `-recorder`, which
+ * 2. Run pdflatex *in Node* on the sample resumes with `-recorder`, which
  *    lists every file TeX actually opened.
  * 3. Pack only those files into public/tex/bundle.data (+ bundle.json index).
  *
@@ -31,8 +31,8 @@ const TEXMF = join(TREE, "texmf-dist");
 
 const BUSYTEX_RELEASE = "https://github.com/busytex/busytex/releases/download/build_wasm_4499aa69fd3cf77ad86a47287d9a5193cf5ad993_7936974349_1";
 const TLNET = "https://mirror.ctan.org/systems/texlive/tlnet/archive";
-/** TeX Live packages our four styles need beyond texlive-basic. */
-const EXTRA_PACKAGES = ["titlesec", "enumitem", "paracol", "xcolor", "microtype", "sourcesans", "lato", "charter", "xkeyval", "fontaxes", "ly1"];
+/** TeX Live packages our styles need beyond texlive-basic. */
+const EXTRA_PACKAGES = ["titlesec", "enumitem", "paracol", "tools", "xcolor", "microtype", "sourcesans", "lato", "charter", "xkeyval", "fontaxes", "ly1"];
 /** Font map files to append to pdftex.map (relative to texmf-dist). */
 const EXTRA_MAPS = ["fonts/map/dvips/lato/lato.map", "fonts/map/dvips/sourcesans/SourceSansThree.map"];
 /** Files TeX needs at runtime that -recorder doesn't list (config, formats' companions). */

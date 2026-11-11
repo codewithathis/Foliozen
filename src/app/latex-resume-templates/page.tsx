@@ -15,7 +15,7 @@ import { RESUME_CSS, RESUME_FONTS_URL } from "@/lib/templates/html/styles";
 export const metadata: Metadata = pageMetadata({
   title: "Free LaTeX Resume Templates for Overleaf",
   description:
-    "Four free LaTeX resume templates. Add your details in the builder, edit the source and compile on your device, or open the project in Overleaf.",
+    "Five free LaTeX resume templates. Add your details in the builder, edit the source and compile on your device, or open the project in Overleaf.",
   path: ROUTES.latexTemplates,
 });
 
@@ -41,11 +41,11 @@ const WORKFLOW: [string, string][] = [
 const FAQ = [
   {
     q: "Are these LaTeX resume templates free?",
-    a: "Yes. All four styles are free to use, edit and export, with no account or watermark. The project is open source under the MIT License.",
+    a: "Yes. All five styles are free to use, edit and export, with no account or watermark. The project is open source under the MIT License.",
   },
   {
     q: "Are LaTeX resumes ATS-friendly?",
-    a: "Classic, Bold and Banking use a single column with selectable text. They’re the simpler choice for job portals. Two-column uses a sidebar; check its reading order before sharing. Always follow the posting’s file requirements.",
+    a: "Classic, Bold, Banking and Modern use a single column with selectable text. They’re the simpler choice for job portals. Two-column uses a sidebar; check its reading order before sharing. Always follow the posting’s file requirements.",
   },
   {
     q: "Do I need to know LaTeX?",
@@ -53,7 +53,7 @@ const FAQ = [
   },
   {
     q: "Which engine do the templates use?",
-    a: "All four compile with pdfLaTeX and use common packages, so they work in Overleaf and in a standard TeX Live install.",
+    a: "All five compile with pdfLaTeX and use common packages, so they work in Overleaf and in a standard TeX Live install.",
   },
   {
     q: "Can I switch templates after I start?",
@@ -84,7 +84,7 @@ export default function LatexResumeTemplatesPage() {
       <ContentPage
         eyebrow="LaTeX templates"
         title="Free LaTeX resume templates"
-        intro="Four styles, with source you can edit. Add your details in the builder, compile on your device, or open the project in Overleaf."
+        intro="Five styles, with source you can edit. Add your details in the builder, compile on your device, or open the project in Overleaf."
         cta={[ROUTES.build, "Choose a template"]}
       >
         <section className="mt-12 sm:mt-20" aria-labelledby="styles">
@@ -95,7 +95,7 @@ export default function LatexResumeTemplatesPage() {
             Shown with sample details. Compile in the editor to see the final
             PDF.
           </p>
-          <ul className="mt-6 grid grid-cols-2 gap-x-4 gap-y-8 sm:mt-8 sm:gap-6 lg:grid-cols-4">
+          <ul className="mt-6 grid grid-cols-2 gap-x-4 gap-y-8 sm:mt-8 sm:gap-6 lg:grid-cols-3 xl:grid-cols-5">
             {LATEX_STYLES.map((style) => (
               <li key={style.id}>
                 <Link
@@ -146,9 +146,9 @@ export default function LatexResumeTemplatesPage() {
             of a PDF.
           </p>
           <p>
-            Classic, Bold and Banking use one column, familiar headings and
-            plain bullets. Two-column has a sidebar and is intended for direct
-            sharing.
+            Classic, Bold, Banking and Modern use one column, familiar headings
+            and plain bullets. Two-column has a sidebar and is intended for
+            direct sharing.
           </p>
           <p>
             Use the{" "}

@@ -33,7 +33,7 @@ npm run tex:bundle    # build the in-browser TeX engine bundle into public/tex/ 
 - **ATS checker** that names the problem ("Role 2 is missing an end date", "three bullets open with *responsible for*") and links each finding to the field that fixes it. Job matching suggests recognized skills and domain phrases. Select terms, add your own, or explicitly add relevant missing skills with undo and preview-only highlights.
 - **Local exports:** text PDF with embedded fonts, DOCX with real Word heading styles, and LaTeX. Names default to `Applicant_Role_Company`; editable title and author are saved per draft. Print remains available for custom CSS.
 - **LaTeX studio:** an Overleaf-style editor with a file tree, outline, toolbar, autocomplete, lint-gutter errors, and a pdf.js viewer with page navigation and zoom. Recompile or auto-compile. Or press **Open in Overleaf** and continue there.
-- **Four LaTeX styles** (Classic, Bold, Banking, Two-column), written from scratch. One self-contained `.tex` each.
+- **Five LaTeX styles** (Classic, Bold, Banking, Modern, Two-column), written from scratch. One self-contained `.tex` each.
 - Light, dark and system themes. Multiple named drafts. JSON import/export.
 - A monthly changelog at `/changelog/`, updated through `src/lib/changelog.ts`.
 - Locally bundled interface, heading, editor and resume fonts, with no font-service requests in the browser.
@@ -55,7 +55,7 @@ src/components/latex/          the studio, CodeMirror editor, pdf.js viewer
 
 - **PDF downloads** use pdf-lib and the bundled Source fonts, loaded only when exporting. Text stays selectable; paper, typography, margins, accents and section order follow draft settings. Pagination is independent of the HTML preview. Custom CSS requires **Print**, which renders the preview but may include browser-generated metadata. Downloaded PDFs use the chosen title and author, use that author as creator, and omit browser/OS details. Studio PDF downloads replace original document metadata locally. These are document-property controls, not anonymization or removal of visible personal content.
 - PDF faces are checked in under `public/fonts/pdf/`. To regenerate from the bundled WOFF2 sources, install Python `fonttools` and `brotli`, then run `python scripts/prepare-pdf-fonts.py`. Python is not needed to build or use the site.
-- **LaTeX compiles run in the browser.** `npm run tex:bundle` downloads [BusyTeX](https://github.com/busytex/busytex) (pdfTeX compiled to WebAssembly, MIT) and its TeX Live tree, compiles the four sample resumes with `-recorder` to learn exactly which files TeX touches, and packs only those into `public/tex/` (about 13 MB of tree + 30 MB engine). The worker in `public/tex/tex-worker.js` loads it once (Cache API) and runs `pdflatex` locally; nothing leaves the machine. If the bundle isn't deployed, the studio falls back to [LaTeX-On-HTTP](https://github.com/YtoTech/latex-on-http) (latex.ytotech.com), and asks first because the source leaves the browser.
+- **LaTeX compiles run in the browser.** `npm run tex:bundle` downloads [BusyTeX](https://github.com/busytex/busytex) (pdfTeX compiled to WebAssembly, MIT) and its TeX Live tree, compiles the sample resumes with `-recorder` to learn exactly which files TeX touches, and packs only those into `public/tex/` (about 13 MB of tree + 30 MB engine). The worker in `public/tex/tex-worker.js` loads it once (Cache API) and runs `pdflatex` locally; nothing leaves the machine. If the bundle isn't deployed, the studio falls back to [LaTeX-On-HTTP](https://github.com/YtoTech/latex-on-http) (latex.ytotech.com), and asks first because the source leaves the browser.
 - **Open in Overleaf** uses Overleaf's documented link integration (`POST https://www.overleaf.com/docs` with `encoded_snip`), so the whole project rides in the form body.
 
 ## Deploying
@@ -106,7 +106,7 @@ Score: 100 − 18 per fail − 7 per warning − 3 per tip. Draft checks pass at
 
 ## Templates
 
-Four LaTeX styles, all original: Classic, Bold, Banking, and Two-column (the last is for human readers only; the checker warns when it's selected). Each is a single self-contained `.tex` that compiles with `pdflatex` in the browser, on a stock TeX Live, or in Overleaf.
+Five LaTeX styles, all original: Classic, Bold, Banking, Modern, and Two-column (the last is for human readers only; the checker warns when it's selected). Each is a single self-contained `.tex` that compiles with `pdflatex` in the browser, on a stock TeX Live, or in Overleaf.
 
 Third-party components we ship (the TeX engine, fonts, pdf.js, CodeMirror) and their licenses are listed in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 

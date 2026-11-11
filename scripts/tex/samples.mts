@@ -1,4 +1,4 @@
-/** Writes the four sample .tex files used to trace which TeX files the bundle needs. */
+/** Writes the sample .tex files used to trace which TeX files the bundle needs. */
 import { writeFileSync, mkdirSync } from "node:fs";
 import { sampleResume } from "../../src/lib/sample";
 import { renderLatex } from "../../src/lib/templates/latex";

@@ -81,6 +81,14 @@ export const LATEX_STYLES: LatexStyleMeta[] = [
     atsSafe: true,
   },
   {
+    id: "modern",
+    name: "Modern",
+    tagline: "Sans headline, company-first entries",
+    detail: "For backend, platform and engineering roles.",
+    engine: "pdflatex",
+    atsSafe: true,
+  },
+  {
     id: "columns",
     name: "Two-column",
     tagline: "Two columns with a sidebar",

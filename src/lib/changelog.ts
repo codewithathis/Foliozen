@@ -8,6 +8,13 @@ export const CHANGELOG: ChangelogMonth[] = [
     month: "2026-11",
     entries: [
       {
+        version: "0.5.3",
+        date: "2026-11-11",
+        changes: [
+          "Added Modern, a sans-serif LaTeX resume style with a bold name, company-first entries and two-column skills.",
+        ],
+      },
+      {
         version: "0.5.2",
         date: "2026-11-11",
         changes: [

@@ -137,6 +137,16 @@ export const RESUME_CSS = `
 .rs--tex-banking .rs-headline{font-style:italic}
 .rs--tex-banking .rs-sec-h{font-family:var(--serif);text-transform:uppercase;letter-spacing:.12em;font-size:10pt;border-bottom:.5pt solid #222;color:#111}
 
+.rs--tex-modern{font-family:var(--sans);padding:.45in .55in;font-size:10.5pt;line-height:1.25}
+.rs--tex-modern .rs-head{text-align:center;margin-bottom:8pt}
+.rs--tex-modern .rs-name{font-family:inherit;font-size:26pt;font-weight:700;letter-spacing:0;text-transform:none;color:#111}
+.rs--tex-modern .rs-headline{font-style:italic;font-size:12pt;letter-spacing:0;text-transform:none;color:#333}
+.rs--tex-modern .rs-contact{font-size:9pt;margin-top:4pt}
+.rs--tex-modern .rs-sec-h{font-family:inherit;font-size:12pt;font-weight:700;letter-spacing:0;text-transform:none;border-bottom:.6pt solid #111;color:#111;padding-bottom:2pt}
+.rs--tex-modern .rs-entry{margin-bottom:4pt}
+.rs--tex-modern .rs-skills{column-count:2;column-gap:1.2em}
+.rs--tex-modern .rs-skills p{margin-bottom:3pt;break-inside:avoid}
+
 .rs--tex-columns{font-family:"Lato",var(--sans);padding:.4in .5in;display:grid;grid-template-columns:2.2in 1fr;column-gap:.3in;align-content:start}
 .rs--tex-columns .rs-head{grid-column:1/-1;border-bottom:1.2pt solid #222;padding-bottom:6pt;margin-bottom:8pt;display:flex;justify-content:space-between;align-items:flex-end}
 .rs--tex-columns .rs-name{font-family:inherit;font-size:28pt;font-weight:300;letter-spacing:.01em;color:#111}

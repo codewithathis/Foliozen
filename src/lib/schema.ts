@@ -81,7 +81,7 @@ export const SECTION_IDS = [
 export type SectionId = (typeof SECTION_IDS)[number];
 
 export const HTML_TEMPLATE_IDS = ["standard", "student", "combination", "senior"] as const;
-export const LATEX_STYLE_IDS = ["classic", "bold", "banking", "columns"] as const;
+export const LATEX_STYLE_IDS = ["classic", "bold", "banking", "modern", "columns"] as const;
 export type HtmlTemplateId = (typeof HTML_TEMPLATE_IDS)[number];
 export type LatexStyleId = (typeof LATEX_STYLE_IDS)[number];
 
