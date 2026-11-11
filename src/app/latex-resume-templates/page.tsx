@@ -100,7 +100,7 @@ export default function LatexResumeTemplatesPage() {
               <li key={style.id}>
                 <Link
                   prefetch={false}
-                  href={ROUTES.build}
+                  href={`${ROUTES.latexStudio}?style=${style.id}`}
                   className="group block"
                 >
                   <div className="template-art relative flex justify-center overflow-hidden rounded-card bg-paper-2 px-3 pt-5 sm:px-6 sm:pt-8">

@@ -27,7 +27,7 @@ import {
   downloadBlob,
 } from "@/lib/export/download";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
-import type { LatexStyleId } from "@/lib/schema";
+import { LATEX_STYLE_IDS, type LatexStyleId } from "@/lib/schema";
 import {
   compileLatex,
   COMPILE_SERVICE,
@@ -96,10 +96,22 @@ function Studio() {
   const rename = useResumeStore((s) => s.renameDraft);
 
   const editor = useRef<LatexEditorHandle>(null);
-  const initial = useMemo(() => latexForExport(r).files["resume.tex"], []); // eslint-disable-line react-hooks/exhaustive-deps
+  // Honour ?style= from the templates page so picking Modern (etc.) opens that source.
+  const queryStyle = useMemo(() => {
+    if (typeof window === "undefined") return null;
+    const raw = new URLSearchParams(window.location.search).get("style");
+    return raw && (LATEX_STYLE_IDS as readonly string[]).includes(raw)
+      ? (raw as LatexStyleId)
+      : null;
+  }, []);
+  const initial = useMemo(() => {
+    if (queryStyle) return renderLatex(r, queryStyle).files["resume.tex"];
+    return latexForExport(r).files["resume.tex"];
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const readme = useMemo(() => renderLatex(r).files["README.md"], [r]);
   const [source, setSource] = useState(initial);
-  const [edited, setEdited] = useState(Boolean(r.meta.latexSource));
+  const [edited, setEdited] = useState(queryStyle ? false : Boolean(r.meta.latexSource));
   const [file, setFile] = useState<"resume.tex" | "README.md">("resume.tex");
   const [engine, setEngine] = useState<Engine>("pdflatex");
   const [auto, setAuto] = useState(() => !preferManualCompile());
@@ -142,6 +154,19 @@ function Studio() {
     });
     return onLocalProgress(setProgress);
   }, []);
+
+  // Persist ?style= into the draft and drop it from the URL so refresh keeps the choice.
+  useEffect(() => {
+    if (!queryStyle) return;
+    update((d) => {
+      d.meta.latexStyle = queryStyle;
+      d.meta.latexSource = "";
+      d.meta.latexSourceStyle = undefined;
+    });
+    const url = new URL(window.location.href);
+    url.searchParams.delete("style");
+    window.history.replaceState({}, "", `${url.pathname}${url.search}`);
+  }, [queryStyle, update]);
   const useLocal = backend === "local" && localAvail === true;
   const askRemote =
     !useLocal && localAvail !== null && !remoteOk && !remoteDismissed;

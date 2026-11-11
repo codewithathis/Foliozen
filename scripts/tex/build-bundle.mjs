@@ -32,7 +32,7 @@ const TEXMF = join(TREE, "texmf-dist");
 const BUSYTEX_RELEASE = "https://github.com/busytex/busytex/releases/download/build_wasm_4499aa69fd3cf77ad86a47287d9a5193cf5ad993_7936974349_1";
 const TLNET = "https://mirror.ctan.org/systems/texlive/tlnet/archive";
 /** TeX Live packages our styles need beyond texlive-basic. */
-const EXTRA_PACKAGES = ["titlesec", "enumitem", "paracol", "tools", "xcolor", "microtype", "sourcesans", "lato", "charter", "xkeyval", "fontaxes", "ly1"];
+const EXTRA_PACKAGES = ["titlesec", "enumitem", "paracol", "xcolor", "microtype", "sourcesans", "lato", "charter", "xkeyval", "fontaxes", "ly1"];
 /** Font map files to append to pdftex.map (relative to texmf-dist). */
 const EXTRA_MAPS = ["fonts/map/dvips/lato/lato.map", "fonts/map/dvips/sourcesans/SourceSansThree.map"];
 /** Files TeX needs at runtime that -recorder doesn't list (config, formats' companions). */

@@ -8,6 +8,14 @@ export const CHANGELOG: ChangelogMonth[] = [
     month: "2026-11",
     entries: [
       {
+        version: "0.5.4",
+        date: "2026-11-11",
+        changes: [
+          "Fixed Modern LaTeX compiles in the browser by using packages already in the local TeX bundle.",
+          "Choosing a LaTeX template now opens the studio with that style applied.",
+        ],
+      },
+      {
         version: "0.5.3",
         date: "2026-11-11",
         changes: [

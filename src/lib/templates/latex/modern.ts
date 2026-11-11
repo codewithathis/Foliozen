@@ -23,7 +23,6 @@ export function renderModern(r: Resume): LatexOutput {
 \\usepackage{xcolor}
 \\usepackage{titlesec}
 \\usepackage{enumitem}
-\\usepackage{multicol}
 \\usepackage{tabularx}
 \\usepackage{microtype}
 \\usepackage[hidelinks]{hyperref}
@@ -102,17 +101,21 @@ function section(id: ReturnType<typeof orderedSections>[number], r: Resume): str
         "\\end{vEntries}\n"
       );
     case "skills": {
-      const lines = r.skills
+      // Two-column via tabularx (in the in-browser TeX bundle). Avoid multicol —
+      // it is not packed into public/tex, so Modern would fail to compile locally.
+      const groups = r.skills
         .filter((g) => g.items.length)
-        .map((g) => `\\item ${g.category ? `\\textbf{${tex(g.category)}:} ` : ""}${tex(g.items.join(", "))}`);
-      if (!lines.length) return "";
+        .map((g) => `${g.category ? `\\textbf{${tex(g.category)}:} ` : ""}${tex(g.items.join(", "))}`);
+      if (!groups.length) return "";
+      const rows: string[] = [];
+      for (let i = 0; i < groups.length; i += 2) {
+        rows.push(`  ${groups[i]} & ${groups[i + 1] ?? ""} \\\\`);
+      }
       return (
         H +
-        "\\begin{multicols}{2}\n" +
-        "\\begin{itemize}[leftmargin=*,itemsep=2pt,topsep=0pt]\n" +
-        lines.join("\n") +
-        "\n\\end{itemize}\n" +
-        "\\end{multicols}\n"
+        "\\begin{tabularx}{\\textwidth}{@{}X@{\\hspace{1.2em}}X@{}}\n" +
+        rows.join("\n") +
+        "\n\\end{tabularx}\\par\\vspace{4pt}\n"
       );
     }
     case "projects":
