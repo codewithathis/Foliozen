@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import { SiteFooter } from "@/components/ui/SiteFooter";
 import { FloatingNav } from "@/components/ui/FloatingNav";
 import { CHANGELOG } from "@/lib/changelog";
@@ -8,7 +8,7 @@ import { JsonLd, ROUTES, breadcrumb, pageMetadata } from "@/lib/seo";
 export const metadata: Metadata = pageMetadata({
   title: "Changelog and Release Notes",
   description:
-    "What’s new in ResumeFold. Features, fixes and improvements, grouped by month and version.",
+    "What’s new in Foliozen. Features, fixes and improvements, grouped by month and version.",
   path: ROUTES.changelog,
 });
 

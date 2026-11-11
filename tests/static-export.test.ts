@@ -6,7 +6,7 @@ import { join } from "node:path";
 import { normalizeStaticSegments } from "../scripts/normalize-static-segments.mjs";
 
 test("serves Windows-exported route segments at the router's dotted URLs", async () => {
-  const root = await mkdtemp(join(tmpdir(), "resumefold-static-"));
+  const root = await mkdtemp(join(tmpdir(), "foliozen-static-"));
   try {
     const segment = join(root, "build", "__next.build", "__PAGE__.txt");
     await mkdir(join(root, "build", "__next.build"), { recursive: true });
@@ -22,7 +22,7 @@ test("serves Windows-exported route segments at the router's dotted URLs", async
     await normalizeStaticSegments(root);
     assert.equal(await readFile(join(root, "build", "__next.build.__PAGE__.txt"), "utf8"), "flight payload");
   } finally {
-    assert.ok(root.startsWith(join(tmpdir(), "resumefold-static-")));
+    assert.ok(root.startsWith(join(tmpdir(), "foliozen-static-")));
     await rm(root, { recursive: true, force: true });
   }
 });

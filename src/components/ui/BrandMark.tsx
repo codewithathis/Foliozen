@@ -13,9 +13,9 @@ export function BrandMark({ lockup = false }: { lockup?: boolean }) {
         <Image
           key={theme}
           className={`brand-asset brand-asset-${theme}`}
-          src={`${base}/brand/resumefold-${asset}-${theme}.svg`}
+          src={`${base}/brand/foliozen-${asset}-${theme}.svg`}
           alt=""
-          width={lockup ? 999 : 1024}
+          width={lockup ? 810 : 1024}
           height={lockup ? 256 : 1024}
           loading="eager"
           unoptimized

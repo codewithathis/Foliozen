@@ -1,4 +1,4 @@
-# ResumeFold
+﻿# Foliozen
 
 Browser support and device-specific handling are documented in [docs/browser-compatibility.md](docs/browser-compatibility.md).
 

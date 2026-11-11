@@ -1,6 +1,6 @@
-# Third-party notices
+﻿# Third-party notices
 
-ResumeFold's own code is MIT licensed (see LICENSE). The deployed site also ships the components below. Their licenses require that these notices travel with the software; this file is that notice. Nothing here is a dependency you need to think about as a user.
+Foliozen's own code is MIT licensed (see LICENSE). The deployed site also ships the components below. Their licenses require that these notices travel with the software; this file is that notice. Nothing here is a dependency you need to think about as a user.
 
 ## Shipped in the page
 
@@ -38,4 +38,4 @@ If the engine bundle isn't deployed, the studio can send LaTeX source to [LaTeX-
 
 ## Trademarks
 
-Overleaf, Workday, Taleo, iCIMS, Greenhouse and Lever are trademarks of their respective owners. ResumeFold is independent and not affiliated with or endorsed by any of them.
+Overleaf, Workday, Taleo, iCIMS, Greenhouse and Lever are trademarks of their respective owners. Foliozen is independent and not affiliated with or endorsed by any of them.

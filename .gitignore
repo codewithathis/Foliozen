@@ -45,3 +45,5 @@ public/vendor/
 
 # in-browser TeX build artifacts
 .tex-cache/
+
+.vercel

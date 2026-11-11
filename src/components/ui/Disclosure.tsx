@@ -2,7 +2,7 @@
 
 import { useEffect, useId, useRef } from "react";
 
-const OPEN_EVENT = "resumefold:disclosure-open";
+const OPEN_EVENT = "foliozen:disclosure-open";
 const EASE_OPEN = "cubic-bezier(0.22, 1, 0.36, 1)";
 const EASE_CLOSE = "cubic-bezier(0.4, 0, 0.2, 1)";
 

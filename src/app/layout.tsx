@@ -96,7 +96,7 @@ export const metadata: Metadata = {
         media: "(prefers-color-scheme: light)",
       },
       {
-        url: `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/brand/resumefold-icon-small-dark.svg`,
+        url: `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/brand/foliozen-icon-small-dark.svg`,
         type: "image/svg+xml",
         sizes: "any",
         media: "(prefers-color-scheme: dark)",

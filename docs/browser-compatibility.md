@@ -1,4 +1,4 @@
-# Browser and device compatibility
+﻿# Browser and device compatibility
 
 The same static build runs on Windows, macOS, iOS/iPadOS and Android. Fonts, PDF workers and the TeX engine are bundled locally. No operating-system detection changes the resume content or typography.
 
@@ -10,7 +10,7 @@ The same static build runs on Windows, macOS, iOS/iPadOS and Android. Fonts, PDF
 | PDF text extraction and studio preview | PDF.js's legacy baseline: Chrome/Edge 125+, maintained Firefox ESR/current, Safari 18+ |
 | Browser TeX compile | WebAssembly and module workers; manual recompile by default on mobile and devices with limited resources |
 
-Current Chrome on Android and Windows/macOS, current Safari on iPhone/iPad/macOS, and current Edge/Firefox are the intended full-feature targets. ResumeFold also supplies the promise and buffer APIs missing in Safari 16.4–17.3, extending compatibility beyond PDF.js's official baseline. This extension is regression-tested with missing APIs, but has not been verified on a physical device running those Safari versions. DOCX, TXT and pasted text remain alternatives. Native print/save dialogs and file pickers differ across operating systems.
+Current Chrome on Android and Windows/macOS, current Safari on iPhone/iPad/macOS, and current Edge/Firefox are the intended full-feature targets. Foliozen also supplies the promise and buffer APIs missing in Safari 16.4–17.3, extending compatibility beyond PDF.js's official baseline. This extension is regression-tested with missing APIs, but has not been verified on a physical device running those Safari versions. DOCX, TXT and pasted text remain alternatives. Native print/save dialogs and file pickers differ across operating systems.
 
 ## Compatibility measures
 
@@ -36,7 +36,7 @@ Automated tests cover import validation, bounded DOCX decompression, actual PDF 
 
 Local Chromium checks cover phone/tablet/desktop layouts, portrait/landscape sizes, file imports, template selection, section tracking and studio rendering. These checks simulate viewport sizes and missing JavaScript features; they do not substitute for physical iPhone/Android devices or Safari/Firefox engine testing. The current session has no connected Safari, macOS or Android test browser.
 
-The October 2026 final pass checked 18 viewports from 320 × 568 to 2560 × 1440, including iPad portrait/landscape and common MacBook and Windows laptop sizes. Phone and basic Windows profiles also ran with 6× CPU throttling. Checks covered navigation targets and section tracking, editable fields, preview mounting and bento overflow. Scroll reveals were verified with normal/reduced motion, limited resources, a missing observer API and scripts disabled. The production export was checked under `/resumefold/`, including route changes, deferred tool loading and a constrained-connection phone profile. All 32 import, analysis, export and static-routing regression tests passed.
+The October 2026 final pass checked 18 viewports from 320 × 568 to 2560 × 1440, including iPad portrait/landscape and common MacBook and Windows laptop sizes. Phone and basic Windows profiles also ran with 6× CPU throttling. Checks covered navigation targets and section tracking, editable fields, preview mounting and bento overflow. Scroll reveals were verified with normal/reduced motion, limited resources, a missing observer API and scripts disabled. The production export was checked under `/Foliozen/`, including route changes, deferred tool loading and a constrained-connection phone profile. All 32 import, analysis, export and static-routing regression tests passed.
 
 ## Sources
 

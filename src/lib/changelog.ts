@@ -5,6 +5,18 @@ export type ChangelogMonth = {
 
 export const CHANGELOG: ChangelogMonth[] = [
   {
+    month: "2026-11",
+    entries: [
+      {
+        version: "0.5.2",
+        date: "2026-11-11",
+        changes: [
+          "Renamed the product to Foliozen and refreshed the logo and wordmark across the site, icons and social previews.",
+        ],
+      },
+    ],
+  },
+  {
     month: "2026-10",
     entries: [
       {

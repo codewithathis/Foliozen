@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
-  <title>ResumeFold</title>
+  <title>Foliozen</title>
   <defs>
     <linearGradient id="rf-bg" x1="512" y1="0" x2="512" y2="1024" gradientUnits="userSpaceOnUse">
       <stop offset="0" stop-color="#2B3548"/><stop offset="1" stop-color="#0C1017"/>
@@ -12,19 +12,15 @@
     </filter>
     <clipPath id="rf-clip"><path d="M657.49 0.00 C785.78 0.00 849.93 0.00 898.93 24.97 A229.07 229.07 0 0 1 999.03 125.07 C1024.00 174.07 1024.00 238.22 1024.00 366.51 L1024.00 657.49 C1024.00 785.78 1024.00 849.93 999.03 898.93 A229.07 229.07 0 0 1 898.93 999.03 C849.93 1024.00 785.78 1024.00 657.49 1024.00 L366.51 1024.00 C238.22 1024.00 174.07 1024.00 125.07 999.03 A229.07 229.07 0 0 1 24.97 898.93 C0.00 849.93 0.00 785.78 0.00 657.49 L0.00 366.51 C0.00 238.22 0.00 174.07 24.97 125.07 A229.07 229.07 0 0 1 125.07 24.97 C174.07 0.00 238.22 0.00 366.51 0.00 Z"/></clipPath>
     <linearGradient id="rf-page" x1="512" y1="200" x2="512" y2="824" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#68A8FF"/><stop offset="1" stop-color="#2462EA"/></linearGradient>
-    <linearGradient id="rf-flap" x1="396.0" y1="708.0" x2="512" y2="592" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#9BC0FF"/><stop offset="1" stop-color="#E4EEFF"/></linearGradient>
+    <linearGradient id="rf-flap" x1="420.0" y1="684.0" x2="560" y2="544" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#C4DAFF"/><stop offset="1" stop-color="#FFFFFF"/></linearGradient>
     <filter id="rf-fs" x="-40%" y="-40%" width="180%" height="180%" color-interpolation-filters="sRGB"><feDropShadow dx="10" dy="12" stdDeviation="12" flood-color="#04122E" flood-opacity="0.45"/></filter>
   </defs>
   <g clip-path="url(#rf-clip)">
     <rect width="1024" height="1024" fill="url(#rf-bg)"/>
     <rect width="1024" height="1024" fill="url(#rf-glow)"/>
-    <g id="rf-glyph">
-      <path d="M336 200 L688 200 C718.9 200 744 225.1 744 256 L744 768 C744 798.9 718.9 824 688 824 L534 824 Q512 824 496.4 808.4 L295.6 607.6 Q280 592 280 570 L280 256 C280 225.1 305.1 200 336 200 Z" fill="url(#rf-page)" filter="url(#rf-ps)"/>
-      <circle cx="396" cy="320" r="60" fill="#FFFFFF" fill-opacity="0.92"/>
-      <rect x="340" y="436" width="344" height="40" rx="20" fill="#FFFFFF" fill-opacity="0.4"/>
-      <rect x="340" y="516" width="344" height="40" rx="20" fill="#FFFFFF" fill-opacity="0.4"/>
-      <rect x="556" y="616" width="128" height="40" rx="20" fill="#FFFFFF" fill-opacity="0.4"/>
-      <path d="M302 592 Q280 592 295.6 607.6 L496.4 808.4 Q512 824 512 802 L512 622 Q512 592 482 592 Z" fill="url(#rf-flap)" filter="url(#rf-fs)"/>
+    <g id="rf-glyph" transform="translate(512 512) scale(1.12) translate(-512 -512)">
+      <path d="M336 200 L688 200 C718.9 200 744 225.1 744 256 L744 768 C744 798.9 718.9 824 688 824 L582 824 Q560 824 544.4 808.4 L295.6 559.6 Q280 544 280 522 L280 256 C280 225.1 305.1 200 336 200 Z" fill="url(#rf-page)" filter="url(#rf-ps)"/>
+      <path d="M302 544 Q280 544 295.6 559.6 L544.4 808.4 Q560 824 560 802 L560 574 Q560 544 530 544 Z" fill="url(#rf-flap)" filter="url(#rf-fs)"/>
     </g>
   </g>
 </svg>

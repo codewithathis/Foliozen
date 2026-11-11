@@ -2,12 +2,12 @@ import { findHeading, parseResumeText } from "@/lib/import/parse";
 import { checkResume, type AtsReport, type Issue } from "./check";
 
 /**
- * ATS check for an uploaded file. The draft checker assumes ResumeFold's own layout,
+ * ATS check for an uploaded file. The draft checker assumes Foliozen's own layout,
  * so here we score what a parser actually gets out of the file: the extracted text,
  * the headings it can recognise and the fields it can fill.
  */
 
-/** Passes that only hold for ResumeFold's own exports, not for someone else's file. */
+/** Passes that only hold for Foliozen's own exports, not for someone else's file. */
 const LAYOUT_PASSES = new Set(["A1", "A2", "A4", "A5", "A6", "A7", "B3", "B4", "B6"]);
 const STANDARD_NAMES = { summary: "Summary", experience: "Work Experience", education: "Education", skills: "Skills", projects: "Projects", certifications: "Certifications" } as const;
 

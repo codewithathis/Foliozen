@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
-  <title>ResumeFold</title>
+  <title>Foliozen</title>
   <defs>
     <linearGradient id="rf-bg" x1="512" y1="0" x2="512" y2="1024" gradientUnits="userSpaceOnUse">
       <stop offset="0" stop-color="#5AA2FF"/><stop offset="1" stop-color="#1C5CE0"/>

@@ -1,8 +1,8 @@
-# Resume uploads and job matching
+﻿# Resume uploads and job matching
 
 ## Product choices
 
-ResumeFold reads PDF, DOCX and UTF-8 TXT locally. PDF.js and JSZip load on demand, with no external parsing service or API key. The user reviews extracted text before creating a new draft. Existing drafts remain available.
+Foliozen reads PDF, DOCX and UTF-8 TXT locally. PDF.js and JSZip load on demand, with no external parsing service or API key. The user reviews extracted text before creating a new draft. Existing drafts remain available.
 
 PDF loading uses PDF.js's official legacy build and its matching worker. Both include compatibility support for JavaScript APIs missing from some mobile Safari versions. The worker has a separate filename so an older cached modern worker is not reused. File cancellation checks the signal directly without requiring `AbortSignal.throwIfAborted`.
 
@@ -10,7 +10,7 @@ Contact details and standard section headings are recognised with deterministic 
 
 Headings are matched after collapsing letter spacing ("W O R K E X P E R I E N C E") and accept extended names such as "Skills & Capabilities". PDF lines are rebuilt from text positions: wide gaps become tabs, and bullet glyphs stored after the page text are put back on the line beside them. Entry headings split on pipes, tabs and spaced dashes, except inside brackets.
 
-The comparison can use the edited draft or the original extracted text. Uploads get two scores. The file score reads the extracted text the way a parser would: missing contact details, entries without dates, letter-spaced or renamed headings, link labels with no visible address, and text that fits no field. It skips the layout passes that only hold for ResumeFold's own exports. The draft score describes the formatted draft. Neither score certifies how a particular employer's system will read the file.
+The comparison can use the edited draft or the original extracted text. Uploads get two scores. The file score reads the extracted text the way a parser would: missing contact details, entries without dates, letter-spaced or renamed headings, link labels with no visible address, and text that fits no field. It skips the layout passes that only hold for Foliozen's own exports. The draft score describes the formatted draft. Neither score certifies how a particular employer's system will read the file.
 
 ## Job-specific keywords
 
@@ -33,7 +33,7 @@ Job descriptions, selected keywords and comparison preferences are part of each 
 ## Research sources
 
 - [Greenhouse: unsuccessful resume parsing](https://support.greenhouse.io/hc/en-us/articles/200989175-Unsuccessful-resume-parse) documents failures caused by image resumes, complex layouts and contact details placed in headers, footers or text boxes. This supports editable extraction and explicit limitations.
-- [Jobscan's matching guide](https://www.jobscan.co/jobscan-tutorial) describes comparisons against the job description, skills and keyword context. ResumeFold uses transparent local rules and does not reproduce its proprietary scoring.
+- [Jobscan's matching guide](https://www.jobscan.co/jobscan-tutorial) describes comparisons against the job description, skills and keyword context. Foliozen uses transparent local rules and does not reproduce its proprietary scoring.
 - [PDF.js API](https://mozilla.github.io/pdf.js/api/draft/module-pdfjsLib.html) provides browser PDF loading and text content extraction.
 - [PDF.js browser support](https://github.com/mozilla/pdf.js/wiki/Frequently-Asked-Questions#faq-support) recommends the legacy build for browser compatibility.
 - [JSZip loadAsync](https://stuk.github.io/jszip/documentation/api_jszip/load_async.html), [internalStream](https://stuk.github.io/jszip/documentation/api_zipobject/internal_stream.html) and [StreamHelper](https://stuk.github.io/jszip/documentation/api_streamhelper.html) document selective archive reading and pausable streams.

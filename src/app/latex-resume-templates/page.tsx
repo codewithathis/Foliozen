@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import Link from "next/link";
 import {
   CardGrid,
@@ -22,7 +22,7 @@ export const metadata: Metadata = pageMetadata({
 const WORKFLOW: [string, string][] = [
   [
     "Add your details",
-    "Fill in the builder. ResumeFold turns your details into LaTeX source.",
+    "Fill in the builder. Foliozen turns your details into LaTeX source.",
   ],
   [
     "Compile on your device",
@@ -49,7 +49,7 @@ const FAQ = [
   },
   {
     q: "Do I need to know LaTeX?",
-    a: "No. Fill in the builder and ResumeFold generates the source. If you do know LaTeX, edit it in the studio or in Overleaf.",
+    a: "No. Fill in the builder and Foliozen generates the source. If you do know LaTeX, edit it in the studio or in Overleaf.",
   },
   {
     q: "Which engine do the templates use?",

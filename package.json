@@ -1,6 +1,6 @@
 {
-  "name": "resumefold",
-  "version": "0.5.1",
+  "name": "foliozen",
+  "version": "0.5.2",
   "private": true,
   "scripts": {
     "dev": "next dev",

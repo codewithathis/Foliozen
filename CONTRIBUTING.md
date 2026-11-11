@@ -1,10 +1,10 @@
-# Contributing
+﻿# Contributing
 
 Thanks for looking. This is a small, static TypeScript app. No backend, no database, no accounts. Getting a change from idea to running takes about a minute.
 
 ```bash
-git clone https://github.com/delta-dog/resumefold.git
-cd resumefold
+git clone https://github.com/codewithathis/Foliozen.git
+cd Foliozen
 npm install
 npm run dev        # http://localhost:3000
 npm run check      # lint + typecheck, run before you open a PR

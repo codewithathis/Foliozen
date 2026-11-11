@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { Thumbnail } from "@/components/workspace/Thumbnail";
@@ -21,7 +21,7 @@ import { SITE } from "@/lib/site";
 
 const FAQ: { q: string; a: string }[] = [
   {
-    q: "Is ResumeFold free?",
+    q: "Is Foliozen free?",
     a: "Yes. Templates, resume checks and downloads are free. There’s no subscription or watermark. The source code is available under the MIT License.",
   },
   {
@@ -30,11 +30,11 @@ const FAQ: { q: string; a: string }[] = [
   },
   {
     q: "Can I upload my existing resume?",
-    a: "Yes. Choose a PDF, DOCX or TXT up to 5 MB. ResumeFold reads it on your device. Check the extracted text before creating an editable draft.",
+    a: "Yes. Choose a PDF, DOCX or TXT up to 5 MB. Foliozen reads it on your device. Check the extracted text before creating an editable draft.",
   },
   {
     q: "Should I download a PDF or DOCX?",
-    a: "Follow the file requirements in the job posting. ResumeFold offers PDF and DOCX, so you can use the format requested.",
+    a: "Follow the file requirements in the job posting. Foliozen offers PDF and DOCX, so you can use the format requested.",
   },
   {
     q: "Is my resume data private?",
@@ -42,7 +42,7 @@ const FAQ: { q: string; a: string }[] = [
   },
   {
     q: "What does the ATS score mean?",
-    a: "It’s a guide to common resume issues, based on ResumeFold’s own rules. It isn’t an employer’s score or a prediction of an interview. Review the suggestions and use the ones that fit your experience.",
+    a: "It’s a guide to common resume issues, based on Foliozen’s own rules. It isn’t an employer’s score or a prediction of an interview. Review the suggestions and use the ones that fit your experience.",
   },
 ];
 

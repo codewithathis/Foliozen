@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import Link from "next/link";
 import {
   CardGrid,
@@ -94,7 +94,7 @@ const FAQ = [
   },
   {
     q: "Is this the same score an employer sees?",
-    a: "No. This score comes from ResumeFold’s rules. It helps you review common issues, but it doesn’t reproduce an employer’s system or predict an interview.",
+    a: "No. This score comes from Foliozen’s rules. It helps you review common issues, but it doesn’t reproduce an employer’s system or predict an interview.",
   },
   {
     q: "Why does my uploaded file score lower than my draft?",
@@ -102,10 +102,10 @@ const FAQ = [
   },
   {
     q: "Can it check a scanned resume?",
-    a: "ResumeFold doesn’t read text from images. Use a PDF with selectable text, a DOCX or TXT file, or paste your resume text.",
+    a: "Foliozen doesn’t read text from images. Use a PDF with selectable text, a DOCX or TXT file, or paste your resume text.",
   },
   {
-    q: "Does ResumeFold write my resume?",
+    q: "Does Foliozen write my resume?",
     a: "You write your resume. The checks suggest what to review, and you choose which changes to make.",
   },
 ];
@@ -141,7 +141,7 @@ export default function AtsResumeCheckerPage() {
             employers and dates from a document.
           </p>
           <p>
-            ResumeFold checks your extracted text or edited draft for common
+            Foliozen checks your extracted text or edited draft for common
             issues. You can also compare keywords from a job posting. These are
             local checks, separate from any employer’s system.
           </p>
@@ -197,7 +197,7 @@ export default function AtsResumeCheckerPage() {
 
         <GuideSection title="What an ATS score can’t tell you">
           <p>
-            ResumeFold doesn’t connect to an employer’s hiring system. Its score
+            Foliozen doesn’t connect to an employer’s hiring system. Its score
             reflects the checks described here, not a hiring decision.
           </p>
           <p>

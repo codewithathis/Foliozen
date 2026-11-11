@@ -156,7 +156,7 @@ test("DOCX and generated LaTeX use chosen metadata; hand edits survive", async (
   const core = await zip.file("docProps/core.xml")!.async("string");
   assert.match(core, /<dc:creator>Alex Morgan<\/dc:creator>/);
   assert.match(core, /Application &amp; Resume/);
-  assert.ok(!core.includes("ResumeFold"));
+  assert.ok(!core.includes("Foliozen"));
   assert.ok(latexForExport(resume).files["resume.tex"].includes("pdfauthor={Alex Morgan}"));
   resume.meta.latexSource = "HAND EDITED";
   assert.equal(latexForExport(resume).files["resume.tex"], "HAND EDITED");

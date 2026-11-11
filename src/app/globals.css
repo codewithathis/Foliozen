@@ -1,4 +1,4 @@
-@import "tailwindcss";
+﻿@import "tailwindcss";
 
 .keyword-highlight {
   color: inherit;
@@ -13,7 +13,7 @@
 }
 
 /* ------------------------------------------------------------------
-   ResumeFold design tokens.
+   Foliozen design tokens.
    Quiet typography, restrained surfaces and black primary actions.
    ------------------------------------------------------------------ */
 :root {
